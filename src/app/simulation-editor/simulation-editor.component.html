@@ -1,0 +1,21 @@
+<div class="form">
+  <h1 class="mat-h1">Parametry symulacji</h1>
+  <mat-form-field class="form-field">
+    <input matInput [(ngModel)]="simulationParams.sequence1">
+    <mat-placeholder>Sekwencja 1</mat-placeholder>
+    <mat-hint align="start">A, C, G, T</mat-hint>
+  </mat-form-field>
+  <mat-form-field class="form-field">
+    <input matInput [(ngModel)]="simulationParams.sequence2">
+    <mat-placeholder>Sekwencja 2</mat-placeholder>
+    <mat-hint align="start">A, C, G, T</mat-hint>
+  </mat-form-field>
+  <mat-form-field class="form-field">
+    <input matInput [(ngModel)]="simulationParams.sequence3">
+    <mat-placeholder>Sekwencja 3</mat-placeholder>
+    <mat-hint align="start">A, C, G, T</mat-hint>
+  </mat-form-field>
+  <div class="button-row">
+    <button mat-raised-button>Rozpocznij symulację</button>
+  </div>
+</div>
