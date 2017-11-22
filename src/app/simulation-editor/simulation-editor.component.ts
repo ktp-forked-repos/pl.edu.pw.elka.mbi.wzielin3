@@ -8,11 +8,7 @@ import { SimulationParams } from '../simulation-params';
 })
 export class SimulationEditorComponent implements OnInit {
 
-  simulationParams: SimulationParams = {
-    sequence1: '',
-    sequence2: '',
-    sequence3: ''
-  };
+  simulationParams: SimulationParams = new SimulationParams();
 
   constructor() { }
 
