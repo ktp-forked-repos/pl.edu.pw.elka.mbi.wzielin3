@@ -8,11 +8,13 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { SimulationEditorComponent } from './simulation-editor/simulation-editor.component';
+import { SequenceInputDirective } from './sequence-input/sequence-input.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SimulationEditorComponent
+    SimulationEditorComponent,
+    SequenceInputDirective
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule,
