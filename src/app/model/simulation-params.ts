@@ -1,5 +1,10 @@
+/**
+ * Simulation parameters that can be edited in the view.
+ */
 export class SimulationParams {
+  /** Three sequences */
   sequences: string[] = ['AGTTAT', 'GTCGTT', 'ATTCGTAT'];
+  /** Fitnes matrix */
   fitnesMatrix: number[][];
 
   constructor() {
@@ -22,5 +27,14 @@ export class SimulationParams {
     row['T'] = t;
     row['-'] = gap;
     return row;
+  }
+
+  /**
+   * @return overall fitness of three symbols from three different sequences.
+   */
+  getFitnes(symbol1: string, symbol2: string, symbol3: string) {
+    return this.fitnesMatrix[symbol1][symbol2] +
+      this.fitnesMatrix[symbol1][symbol3] +
+      this.fitnesMatrix[symbol2][symbol3];
   }
 }
