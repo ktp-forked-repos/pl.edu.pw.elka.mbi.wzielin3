@@ -1,18 +1,8 @@
 <div class="form">
   <h1 class="mat-h1">Parametry symulacji</h1>
-  <mat-form-field class="form-field">
-    <input matInput [(ngModel)]="simulationParams.sequences[0]" appSequenceInput>
-    <mat-placeholder>Sekwencja 1</mat-placeholder>
-    <mat-hint align="end">A, C, G, T</mat-hint>
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput [(ngModel)]="simulationParams.sequences[1]" appSequenceInput>
-    <mat-placeholder>Sekwencja 2</mat-placeholder>
-    <mat-hint align="end">A, C, G, T</mat-hint>
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput [(ngModel)]="simulationParams.sequences[2]" appSequenceInput>
-    <mat-placeholder>Sekwencja 3</mat-placeholder>
+  <mat-form-field class="form-field" *ngFor="let i of [0, 1, 2]">
+    <input matInput [(ngModel)]="simulationParams.sequences[i]" appSequenceInput>
+    <mat-placeholder>Sekwencja {{i + 1}}</mat-placeholder>
     <mat-hint align="end">A, C, G, T</mat-hint>
   </mat-form-field>
   <div class="button-row">

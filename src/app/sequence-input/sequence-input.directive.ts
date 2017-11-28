@@ -13,11 +13,8 @@ export class SequenceInputDirective {
    */
   @HostListener('keydown', ['$event']) onKeyDown(event) {
     const e = <KeyboardEvent> event;
-    if (this.isPrintable(e.keyCode)) {
-      const symbol = e.key.toUpperCase();
-      if (!this.isAllowed(symbol)) {
+    if (this.isPrintable(e.keyCode) && !this.isAllowed(e.key.toUpperCase())) {
         e.preventDefault();
-      }
     }
   }
 
@@ -29,21 +26,27 @@ export class SequenceInputDirective {
   @HostListener('input', ['$event']) onInput(event) {
     const e = <KeyboardEvent> event;
     const caretPos = this.el.nativeElement.selectionStart;
-    this.el.nativeElement['value'] = this.el.nativeElement['value'].toUpperCase();
+    let oldValue = this.el.nativeElement['value'];
+    let newValue = this.el.nativeElement['value'].toUpperCase();
+     // remove in loop all characters different than A, C, G, T
+    do {
+      oldValue = newValue;
+      newValue = newValue.replace(new RegExp('[^ACGT]+'), '');
+    } while (newValue.length < oldValue.length);
+    this.el.nativeElement['value'] = newValue;
     setTimeout(() => {
       this.el.nativeElement.selectionStart = caretPos;
       this.el.nativeElement.selectionEnd = caretPos;
     });
   }
 
+  /**
+   * check if given text is allowed as a DNA sequence
+   * @param {string} text text to be checked
+   * @returns {boolean}
+   */
   isAllowed(text: string): boolean {
-    text = text.toUpperCase();
-    for (let i = 0; i < text.length; ++i) {
-      if (this.allowedCharacters.indexOf(text[i]) < 0) {
-        return false;
-      }
-    }
-    return true;
+    return text.match(new RegExp('[^ACGT]+')).length === 0;
   }
 
   /**
