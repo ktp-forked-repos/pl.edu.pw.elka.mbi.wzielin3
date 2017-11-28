@@ -1,11 +1,33 @@
-<div class="form">
-  <h1 class="mat-h1">Parametry symulacji</h1>
-  <mat-form-field class="form-field" *ngFor="let i of [0, 1, 2]">
-    <input matInput [(ngModel)]="simulationParams.sequences[i]" appSequenceInput>
-    <mat-placeholder>Sekwencja {{i + 1}}</mat-placeholder>
-    <mat-hint align="end">A, C, G, T</mat-hint>
-  </mat-form-field>
-  <div class="button-row">
-    <button mat-raised-button>Rozpocznij symulację</button>
-  </div>
+<mat-card class="form">
+  <mat-card-title>Parametry symulacji</mat-card-title>
+  <mat-card>
+    <mat-card-title>Sekwencje</mat-card-title>
+    <mat-card-content>
+      <mat-form-field class="form-field" *ngFor="let i of [0, 1, 2]">
+        <input matInput [(ngModel)]="simulationParams.sequences[i]" appSequenceInput/>
+        <mat-placeholder>Sekwencja {{i + 1}}</mat-placeholder>
+        <mat-hint align="end">A, C, G, T</mat-hint>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-title>Macierz dopasowania</mat-card-title>
+    <mat-card-content>
+      <table>
+        <tr>
+          <td></td>
+          <th *ngFor="let i of ['A', 'G', 'C', 'T', '-']" class="center">{{i}}</th>
+        </tr>
+        <tr *ngFor="let i of ['A', 'G', 'C', 'T', '-']">
+          <th>{{i}}</th>
+          <td *ngFor="let j of ['A', 'G', 'C', 'T', '-']">
+            <input type="number" matInput [(ngModel)]="simulationParams.fitnesMatrix[i][j]" class="center"/>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</mat-card>
+<div class="button-row">
+  <button mat-raised-button>Rozpocznij symulację</button>
 </div>

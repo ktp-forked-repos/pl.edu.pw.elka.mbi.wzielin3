@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import {MatCardModule, MatTableModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { SimulationEditorComponent } from './simulation-editor/simulation-editor.component';
@@ -18,7 +19,7 @@ import { SequenceInputDirective } from './sequence-input/sequence-input.directiv
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule,
-    MatInputModule, MatButtonModule
+    MatInputModule, MatButtonModule, MatCardModule, MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

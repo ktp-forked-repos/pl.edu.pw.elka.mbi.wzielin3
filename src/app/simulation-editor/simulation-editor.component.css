@@ -14,3 +14,11 @@
   align-items: center;
   justify-content: space-around;
 }
+
+.center {
+  text-align: center;
+}
+
+mat-card {
+  margin-bottom: 2em;
+}
