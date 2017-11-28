@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SimulationParams } from '../simulation-params';
+import { SimulationParams } from '../model/simulation-params';
 
 @Component({
   selector: 'app-simulation-editor',

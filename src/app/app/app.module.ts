@@ -8,8 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule, MatTableModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
-import { SimulationEditorComponent } from './simulation-editor/simulation-editor.component';
-import { SequenceInputDirective } from './sequence-input/sequence-input.directive';
+import { SimulationEditorComponent } from '../simulation-editor/simulation-editor.component';
+import { SequenceInputDirective } from '../sequence-input/sequence-input.directive';
 
 @NgModule({
   declarations: [
