@@ -32,9 +32,9 @@ export class SimulationParams {
   /**
    * @return overall fitness of three symbols from three different sequences.
    */
-  getFitnes(symbol1: string, symbol2: string, symbol3: string) {
-    return this.fitnesMatrix[symbol1][symbol2] +
-      this.fitnesMatrix[symbol1][symbol3] +
-      this.fitnesMatrix[symbol2][symbol3];
+  getFitnes(symbols: string[]) {
+    return this.fitnesMatrix[symbols[0]][symbols[1]] +
+      this.fitnesMatrix[symbols[0]][symbols[2]] +
+      this.fitnesMatrix[symbols[1]][symbols[2]];
   }
 }
