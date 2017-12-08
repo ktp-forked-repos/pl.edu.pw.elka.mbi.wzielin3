@@ -1,4 +1,5 @@
 import {SimulationParams} from './simulation-params';
+import {AppEvent, CellFilledEvent} from './events';
 
 enum SimulatorState {
   /** Simulator is filling cube cells */
@@ -38,10 +39,10 @@ export class Simulator {
   /**
    * Performs one step of the simulation.
    */
-  private step() {
+  public step(): AppEvent {
     switch (this.state) {
-      case SimulatorState.FillingCells: this.fillCurrCell(); break;
-      default: return;
+      case SimulatorState.FillingCells: return this.fillCurrCell();
+      default: return null;
     }
     // Return an Event TODO create Event class hierarchy
     // Events should represent a simulation state change which can be interpreted by the view
@@ -51,14 +52,16 @@ export class Simulator {
   /**
    * Fill next cell
    */
-  private fillCurrCell() {
+  private fillCurrCell(): CellFilledEvent {
     const val = this.calculateCurrCellMaxRecursive([false, false, false], 0);
+    const result = new CellFilledEvent(this.idx.slice(0), val);
     this.setCurrCell(val);
     if (this.isCurrCellLast()) {
       this.state = SimulatorState.CalculatingBestPath;
-      return;
+    } else {
+      this.incrementIdx();
     }
-    this.incrementIdx();
+    return result;
   }
 
   /**
@@ -76,11 +79,11 @@ export class Simulator {
     const withGapMax = this.calculateCurrCellMaxRecursive(isGap, seqNo + 1);
     isGap[seqNo] = false;
     const withoutGapMax = this.calculateCurrCellMaxRecursive(isGap, seqNo + 1);
-    if (withGapMax === NaN) {
+    if (isNaN(withGapMax)) {
       return withoutGapMax;
     }
-    if (withoutGapMax === NaN) {
-      return withoutGapMax;
+    if (isNaN(withoutGapMax)) {
+      return withGapMax;
     }
     return Math.max(withGapMax, withoutGapMax);
   }
@@ -95,7 +98,7 @@ export class Simulator {
     if (isGap.indexOf(false) < 0) {
       return NaN;
     }
-    const idx = [this.idx[0], this.idx[1], this.idx[2]];
+    const idx = this.idx.slice(0);
     const symbols = ['-', '-', '-'];
     for (let seqNo = 0; seqNo < 3; ++seqNo) {
       if (!isGap[seqNo]) {
@@ -103,13 +106,16 @@ export class Simulator {
         symbols[seqNo] = this.params.sequences[seqNo][this.idx[seqNo] - 1];
       }
     }
+    if (!this.isValidCell(idx)) {
+      return NaN;
+    }
     return this.getCell(idx) + this.params.getFitnes(symbols);
   }
 
   /**
    * Returns value in cell specified by indices.
    *
-   * @param {number[]} indices specifing the cell
+   * @param {number[]} idx indices specifing the cell
    * @return {number} value of cell specified by indecies
    */
   private getCell(idx: number[]): number {
@@ -122,7 +128,6 @@ export class Simulator {
   /**
    * Sets value in cell specified by indixes.
    *
-   * @param {number[]} idx indices specifing the cell
    * @param {number} val value to be set in cell specified by indices
    */
   private setCurrCell(val: number) {

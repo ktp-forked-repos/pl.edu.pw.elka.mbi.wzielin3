@@ -17,6 +17,20 @@ export class SimulationParams {
   }
 
   /**
+   * Clone this simulation params.
+   * Used to separate input simulation params in component,
+   * from simulation params used in simulator.
+   */
+  clone(): SimulationParams {
+    const clone = new SimulationParams();
+    clone.sequences = this.sequences.slice(0);
+    for (let i = 0; i < this.fitnesMatrix.length; ++i) {
+      clone.fitnesMatrix[i] = this.fitnesMatrix[i].slice(0);
+    }
+    return clone;
+  }
+
+  /**
    * Create fitness matrix row for given values.
    */
   private makeFitnessMatrixRow(a, g, c, t, gap) {
