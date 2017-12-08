@@ -6,20 +6,24 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule, MatTableModule} from '@angular/material';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 import { AppComponent } from './app.component';
 import { SimulationEditorComponent } from '../simulation-editor/simulation-editor.component';
 import { SequenceInputDirective } from '../sequence-input/sequence-input.directive';
+import {AlgorithmDemoComponent} from '../algorithm-demo/algorithm-demo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SimulationEditorComponent,
-    SequenceInputDirective
+    SequenceInputDirective,
+    AlgorithmDemoComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule,
-    MatInputModule, MatButtonModule, MatCardModule, MatTableModule
+    MatInputModule, MatButtonModule, MatCardModule, MatTableModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
