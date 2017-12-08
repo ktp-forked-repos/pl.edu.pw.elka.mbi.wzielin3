@@ -1,13 +1,19 @@
 import {SimulationParams} from './simulation-params';
-import {AppEvent, CellFilledEvent} from './events';
+import {AppEvent, CellFilledEvent, PathElementReconstructedEvent} from './events';
+import {PathElement} from './path-element';
 
 enum SimulatorState {
   /** Simulator is filling cube cells */
   FillingCells,
   /** Based on cube cells simulator is calculating best path */
-  CalculatingBestPath
+  CalculatingBestPath,
+  /** Simulation is finished */
+  Finished
 }
 
+/**
+ * Class responsible for performing the simulation.
+ */
 export class Simulator {
   // Cube to be filled with fitness values
   private readonly cube: number[][][];
@@ -41,7 +47,8 @@ export class Simulator {
    */
   public step(): AppEvent {
     switch (this.state) {
-      case SimulatorState.FillingCells: return this.fillCurrCell();
+      case SimulatorState.FillingCells: return new CellFilledEvent(this.fillCurrCell());
+      case SimulatorState.CalculatingBestPath: return new PathElementReconstructedEvent(this.calculatePath());
       default: return null;
     }
     // Return an Event TODO create Event class hierarchy
@@ -50,18 +57,29 @@ export class Simulator {
   }
 
   /**
+   * Calculate previous cell to reach current cell.
+   */
+  private calculatePath() {
+    const pathElement = this.calculateCurrCellMaxRecursive([false, false, false], 0);
+    this.idx = pathElement.prevIdx;
+    if (this.isCurrCellFirst()) {
+      this.state = SimulatorState.Finished;
+    }
+    return pathElement;
+  }
+
+  /**
    * Fill next cell
    */
-  private fillCurrCell(): CellFilledEvent {
-    const val = this.calculateCurrCellMaxRecursive([false, false, false], 0);
-    const result = new CellFilledEvent(this.idx.slice(0), val);
-    this.setCurrCell(val);
+  private fillCurrCell(): PathElement {
+    const pathElement = this.calculateCurrCellMaxRecursive([false, false, false], 0);
+    this.setCurrCell(pathElement.currVal);
     if (this.isCurrCellLast()) {
       this.state = SimulatorState.CalculatingBestPath;
     } else {
       this.incrementIdx();
     }
-    return result;
+    return pathElement;
   }
 
   /**
@@ -69,9 +87,9 @@ export class Simulator {
    *
    * @param {boolean[]} isGap array with is recursively build for each possibility
    * @param {number} seqNo sequence number of recursive build
-   * @return {number} best value for current value
+   * @return {PathElement} found path element or null
    */
-  private calculateCurrCellMaxRecursive(isGap: boolean[], seqNo: number): number {
+  private calculateCurrCellMaxRecursive(isGap: boolean[], seqNo: number): PathElement {
     if (seqNo > 2) {
       return this.calculateCurrCell(isGap);
     }
@@ -79,24 +97,26 @@ export class Simulator {
     const withGapMax = this.calculateCurrCellMaxRecursive(isGap, seqNo + 1);
     isGap[seqNo] = false;
     const withoutGapMax = this.calculateCurrCellMaxRecursive(isGap, seqNo + 1);
-    if (isNaN(withGapMax)) {
+    if (withGapMax === null) {
       return withoutGapMax;
     }
-    if (isNaN(withoutGapMax)) {
+    if (withoutGapMax === null) {
       return withGapMax;
     }
-    return Math.max(withGapMax, withoutGapMax);
+    return withGapMax.currVal > withoutGapMax.currVal
+      ? withGapMax
+      : withoutGapMax;
   }
 
   /**
    * Get value for current cell assuming that gaps are specified in given array.
    *
    * @param {boolean[]} isGap array of sequences gaps. At least one sequence must not have a gap.
-   * @return {number} value for the assignment or NaN if not valid.
+   * @return {PathElement} found path element or null
    */
-  private calculateCurrCell(isGap: boolean[]): number {
+  private calculateCurrCell(isGap: boolean[]): PathElement {
     if (isGap.indexOf(false) < 0) {
-      return NaN;
+      return null;
     }
     const idx = this.idx.slice(0);
     const symbols = ['-', '-', '-'];
@@ -107,9 +127,10 @@ export class Simulator {
       }
     }
     if (!this.isValidCell(idx)) {
-      return NaN;
+      return null;
     }
-    return this.getCell(idx) + this.params.getFitnes(symbols);
+    const val = this.getCell(idx) + this.params.getFitnes(symbols);
+    return new PathElement(idx.slice(0), this.idx.slice(0), symbols.slice(0), val);
   }
 
   /**
@@ -135,7 +156,19 @@ export class Simulator {
   }
 
   /**
-   * Is current cell the last to calculate.
+   * Is current cell the first in cube.
+   */
+  private isCurrCellFirst(): boolean {
+    for (let seqNo = 0; seqNo < 3; ++seqNo) {
+      if (this.idx[seqNo] > 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Is current cell the last in cube.
    */
   private isCurrCellLast(): boolean {
     for (let seqNo = 0; seqNo < 3; ++seqNo) {
