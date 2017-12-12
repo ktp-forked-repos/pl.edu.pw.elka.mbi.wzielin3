@@ -11,7 +11,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { AppComponent } from './app.component';
 import { SimulationEditorComponent } from '../simulation-editor/simulation-editor.component';
 import { SequenceInputDirective } from '../sequence-input/sequence-input.directive';
-import {AlgorithmDemoComponent} from '../algorithm-demo/algorithm-demo.component';
+import {AlgorithmDemoComponent} from '../algorithm-demo/simulation-demo.component';
 
 @NgModule({
   declarations: [

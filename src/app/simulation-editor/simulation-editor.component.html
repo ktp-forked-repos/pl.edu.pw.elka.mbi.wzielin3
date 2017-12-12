@@ -32,6 +32,7 @@
     <button mat-raised-button (click)="step()" *ngIf="simulator != null">Krok symulacji</button>
     <button mat-raised-button (click)="skipAllSteps()" *ngIf="simulator != null">Pomiń kroki symulacji</button>
   </div>
+  <canvas #simulationDemo width="500" height="500"></canvas>
 </mat-card>
 <mat-card class="top-level-card" *ngIf="simulator != null">
   <mat-form-field class="form-field">
