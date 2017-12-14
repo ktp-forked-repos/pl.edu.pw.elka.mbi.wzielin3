@@ -1,5 +1,10 @@
-.form {
-  min-height: 100px;
-  max-height: 300px;
+.top-level-card {
+  min-width: 150px;
+  max-width: 800px;
+  width: 100%;
+  margin: auto;
+}
+
+.margin-auto {
   margin: auto;
 }

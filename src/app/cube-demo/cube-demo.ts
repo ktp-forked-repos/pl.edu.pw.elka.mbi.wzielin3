@@ -1,7 +1,7 @@
-export class Cube3d {
+export class Cube {
 
-  private centerX = 250;
-  private centerY = 250;
+  private centerX = 300;
+  private centerY = 300;
   private sizeOfCell = 20;
   private diagonalSizeOfCell = 1.36 * this.sizeOfCell;
 
@@ -9,6 +9,10 @@ export class Cube3d {
     this.drawInterruptedEgdes(sequences[0].length, sequences[1].length, sequences[2].length);
     this.drawEdges(sequences[0].length, sequences[1].length, sequences[2].length);
     this.addSequenceElements(sequences);
+  }
+
+  calculateSizeOfCell(sequences: string[]) {
+    //this.
   }
 
   drawInterruptedEgdes(lengthX, lengthY, lengthZ) {

@@ -4,14 +4,9 @@
   margin: 10px;
 }
 
-.form-field {
+#canvasCube {
   width: 100%;
-}
-
-.button-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  height: 100%;
 }
 
 .center {
@@ -21,3 +16,4 @@
 mat-card {
   margin-bottom: 2em;
 }
+

@@ -1,15 +1,19 @@
-<!--The content below is only a placeholder and can be replaced.-->
-
-<app-simulation-editor></app-simulation-editor>
-
-<!--
-<mat-grid-list cols="3" class="form">
-  <mat-grid-tile [colspan]="1"  class="form">
-    <app-simulation-editor></app-simulation-editor>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="2"  class="form">
+<div fxLayout="row">
+  <div fxFlex="50%" class="margin-auto">
+    <app-simulation-editor
+      (onStartedSimulation)="startSimulation($event)"
+      (onStepCliked)="step($event)"
+      (onSkipAllStepsClicked)="skipAllSteps($event)">
+    </app-simulation-editor>
+  </div>
+  <div fxFlex="50%" class="margin-auto" *ngIf="simulator != null">
     <app-algorithm-demo></app-algorithm-demo>
-  </mat-grid-tile>
-</mat-grid-list>
+  </div>
+</div>
+<mat-card class="top-level-card">
+  <mat-form-field class="form-field">
+    <textarea matInput [ngModel]="eventLog" rows="20" title="Historia zdarzeń"></textarea>
+  </mat-form-field>
+</mat-card>
 
--->
+

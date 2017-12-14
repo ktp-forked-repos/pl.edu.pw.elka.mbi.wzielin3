@@ -1,4 +1,4 @@
-<mat-card class="top-level-card">
+<mat-card class="top-level-card" >
   <mat-card-title>Parametry symulacji</mat-card-title>
   <mat-card>
     <mat-card-title>Sekwencje</mat-card-title>
@@ -21,21 +21,19 @@
         <tr *ngFor="let i of ['A', 'G', 'C', 'T', '-']">
           <th>{{i}}</th>
           <td *ngFor="let j of ['A', 'G', 'C', 'T', '-']">
-            <input type="number" matInput [(ngModel)]="simulationParams.fitnesMatrix[i][j]" class="center" title="Komórka macierzy"/>
+            <input type="number" matInput [(ngModel)]="simulationParams.fitnesMatrix[i][j]" class="center"
+                   title="Komórka macierzy"/>
           </td>
         </tr>
       </table>
     </mat-card-content>
   </mat-card>
   <div class="button-row">
-    <button mat-raised-button (click)="startSimulation()">Nowa symulacja</button>
-    <button mat-raised-button (click)="step()" *ngIf="simulator != null">Krok symulacji</button>
-    <button mat-raised-button (click)="skipAllSteps()" *ngIf="simulator != null">Pomiń kroki symulacji</button>
+    <button mat-raised-button color="primary" (click)="startSimulation()">Nowa symulacja</button>
+    <button mat-raised-button color="primary" (click)="step()" *ngIf="simulationStarted">Krok symulacji</button>
+    <button mat-raised-button color="primary" (click)="skipAllSteps()" *ngIf="simulationStarted">Pomiń kroki symulacji
+    </button>
   </div>
-  <canvas #simulationDemo width="500" height="500"></canvas>
 </mat-card>
-<mat-card class="top-level-card" *ngIf="simulator != null">
-  <mat-form-field class="form-field">
-    <textarea matInput [ngModel]="eventLog" rows="20" title="Historia zdarzeń"></textarea>
-  </mat-form-field>
-</mat-card>
+
+
