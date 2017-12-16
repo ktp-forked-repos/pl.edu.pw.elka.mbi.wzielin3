@@ -1,7 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
 import {Simulator} from '../model/simulator';
 import {SimulationDemoComponent} from '../simulation-demo/simulation-demo.component';
-import {SimulationParams} from "../model/simulation-params";
+import {SimulationParams} from '../model/simulation-params';
+import {SimulationFinishedEvent} from '../model/events';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +31,6 @@ export class AppComponent {
   }
 
   skipAllSteps() {
-    while (this.step() !== null) {
-    }
+    while (!(this.step() instanceof SimulationFinishedEvent)) { }
   }
 }

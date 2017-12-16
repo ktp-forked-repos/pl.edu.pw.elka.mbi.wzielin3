@@ -1,5 +1,5 @@
 import {SimulationParams} from './simulation-params';
-import {AppEvent, CellFilledEvent, PathElementReconstructedEvent} from './events';
+import {AppEvent, CellFilledEvent, PathElementReconstructedEvent, SimulationFinishedEvent} from './events';
 import {PathElement} from './path-element';
 
 enum SimulatorState {
@@ -23,6 +23,8 @@ export class Simulator {
   private idx: number[];
   /** Current state of this simulator */
   private state: SimulatorState;
+  /** The reconstructed path which is the result of simulation */
+  private reconstructedPath: PathElement[];
 
   /**
    * Init cube, cube indexes and state.
@@ -35,6 +37,8 @@ export class Simulator {
     this.cube[0][0][0] = 0;
     this.idx = [0, 0, 0];
     this.incrementIdx();
+    // init empty reconstructed path
+    this.reconstructedPath = [];
     // calculate gapPermutations
     this.isGapPermutations = [];
     this.calculateGapPermutationsRecursive([false, false, false], 0, this.isGapPermutations);
@@ -89,7 +93,8 @@ export class Simulator {
     switch (this.state) {
       case SimulatorState.CalculatingCells: return new CellFilledEvent(this.calculateCurrCell());
       case SimulatorState.ReconstructingPath: return new PathElementReconstructedEvent(this.reconstructCurrPathElement());
-      default: return null;
+      case SimulatorState.Finished: return new SimulationFinishedEvent(this.reconstructedPath);
+      default: throw { msg: 'Unknown simulation state ' + this.state };
     }
   }
 
@@ -121,6 +126,7 @@ export class Simulator {
     if (this.isCurrCellFirst()) {
       this.state = SimulatorState.Finished;
     }
+    this.reconstructedPath.unshift(pathElement);
     return pathElement;
   }
 
