@@ -53,12 +53,16 @@ export class SimulationFinishedEvent extends AppEvent {
   public toString(): string {
     let result = 'Simulation finished with alignment:\n';
     for (let i = 0; i < 3; ++i) {
-      let sequence = '';
-      for (let idx = 0; idx < this.path.length; ++idx) {
-        sequence += this.path[idx].symbols[i];
-      }
-      result += 'Sequence ' + (i + 1) + ': ' + sequence + '\n';
+      result += 'Sequence ' + (i + 1) + ': ' + this.getSequence(i) + '\n';
     }
     return result;
+  }
+
+  public getSequence(i: number): string {
+    let sequence = '';
+    for (let idx = 0; idx < this.path.length; ++idx) {
+      sequence += this.path[idx].symbols[i];
+    }
+    return sequence;
   }
 }
