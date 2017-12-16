@@ -4,9 +4,9 @@ import {PathElement} from './path-element';
 
 enum SimulatorState {
   /** Simulator is filling cube cells */
-  FillingCells,
+  CalculatingCells,
   /** Based on cube cells simulator is calculating best path */
-  CalculatingBestPath,
+  ReconstructingPath,
   /** Simulation is finished */
   Finished
 }
@@ -15,31 +15,71 @@ enum SimulatorState {
  * Class responsible for performing the simulation.
  */
 export class Simulator {
-  // Cube to be filled with fitness values
+  /** Cube to be filled with fitness values */
   private readonly cube: number[][][];
-  // Indices of current cell in cube. Cube edges are sequnce length + 1.
+  /** Possible gap positions for 3 sequences - always initialiazed with 7 possible permutations */
+  private readonly isGapPermutations: boolean[][];
+  /** Indices of current cell in cube. Cube edges are sequnce length + 1. */
   private idx: number[];
-  // State of this simulator
+  /** Current state of this simulator */
   private state: SimulatorState;
 
   /**
    * Init cube, cube indexes and state.
    */
   constructor (private readonly params: SimulationParams) {
-    this.state = SimulatorState.FillingCells;
-    this.cube = [];
-    for (let i = 0; this.isValidIdx(i, 0); ++i) {
-      this.cube[i] = [];
-      for (let j = 0; this.isValidIdx(j, 1); ++j) {
-        this.cube[i][j] = [];
-        for (let k = 0; this.isValidIdx(k, 2); ++k) {
-          this.cube[i][j][k] = NaN;
-        }
-      }
-    }
+    // init state
+    this.state = SimulatorState.CalculatingCells;
+    // init empty cube
+    this.cube = this.getEmptyCube();
     this.cube[0][0][0] = 0;
     this.idx = [0, 0, 0];
     this.incrementIdx();
+    // calculate gapPermutations
+    this.isGapPermutations = [];
+    this.calculateGapPermutationsRecursive([false, false, false], 0, this.isGapPermutations);
+  }
+
+  /**
+   * Returnes empty 3-dimensional cube for this simulation.
+   */
+  private getEmptyCube(): number[][][] {
+    const cube = [];
+    for (let i = 0; this.isValidSequenceIdx(i, 0); ++i) {
+      cube[i] = [];
+      for (let j = 0; this.isValidSequenceIdx(j, 1); ++j) {
+        cube[i][j] = [];
+        for (let k = 0; this.isValidSequenceIdx(k, 2); ++k) {
+          cube[i][j][k] = NaN;
+        }
+      }
+    }
+    return cube;
+  }
+
+  /**
+   * Calculates all possible allowed gap permutations for three sequences.
+   * Result could also be stores as a readonly value because it doesn't vary between simulations.
+   * It always contains 7 out of 8 possible three boolean permutations, except of [true, true, true],
+   * which is not allowed during simulation because it means that gaps should be inserted in all three sequences.
+   *
+   * @param {boolean[]} isGap array used to generate all possibilites
+   * @param {number} seqNo array index to change in this recursion step
+   * @param isGapPermutations variable in which result is stored
+   */
+  private calculateGapPermutationsRecursive(isGap: boolean[], seqNo: number, isGapPermutations: boolean[][]) {
+    // this permutation of isGap array is fully calculated
+    if (seqNo > 2) {
+      // add permutation only if at least one sequence doesn't have gap
+      if (isGap.indexOf(false) >= 0) {
+        isGapPermutations.push(isGap.slice(0));
+      }
+      return;
+    }
+    isGap[seqNo] = true;
+    this.calculateGapPermutationsRecursive(isGap, seqNo + 1, isGapPermutations);
+    isGap[seqNo] = false;
+    this.calculateGapPermutationsRecursive(isGap, seqNo + 1, isGapPermutations);
   }
 
   /**
@@ -47,35 +87,22 @@ export class Simulator {
    */
   public step(): AppEvent {
     switch (this.state) {
-      case SimulatorState.FillingCells: return new CellFilledEvent(this.fillCurrCell());
-      case SimulatorState.CalculatingBestPath: return new PathElementReconstructedEvent(this.calculatePath());
+      case SimulatorState.CalculatingCells: return new CellFilledEvent(this.calculateCurrCell());
+      case SimulatorState.ReconstructingPath: return new PathElementReconstructedEvent(this.reconstructCurrPathElement());
       default: return null;
     }
-    // Return an Event TODO create Event class hierarchy
-    // Events should represent a simulation state change which can be interpreted by the view
-    // Example event: Cell(i,j,k) filled with value
   }
 
   /**
-   * Calculate previous cell to reach current cell.
+   * Calculate next cell and return path element corresponding to performed transition.
+   *
+   * @return best path element to current cell
    */
-  private calculatePath() {
-    const pathElement = this.calculateCurrCellMaxRecursive([false, false, false], 0);
-    this.idx = pathElement.prevIdx;
-    if (this.isCurrCellFirst()) {
-      this.state = SimulatorState.Finished;
-    }
-    return pathElement;
-  }
-
-  /**
-   * Fill next cell
-   */
-  private fillCurrCell(): PathElement {
-    const pathElement = this.calculateCurrCellMaxRecursive([false, false, false], 0);
-    this.setCurrCell(pathElement.currVal);
+  private calculateCurrCell(): PathElement {
+    const pathElement = this.getBestPathElement();
+    this.cube[this.idx[0]][this.idx[1]][this.idx[2]] = pathElement.endCellVal;
     if (this.isCurrCellLast()) {
-      this.state = SimulatorState.CalculatingBestPath;
+      this.state = SimulatorState.ReconstructingPath;
     } else {
       this.incrementIdx();
     }
@@ -83,76 +110,57 @@ export class Simulator {
   }
 
   /**
-   * Recursive search for best assignment to current cell.
+   * Calculate best path element to previous cell from current cell
+   * and move to previous cell.
    *
-   * @param {boolean[]} isGap array with is recursively build for each possibility
-   * @param {number} seqNo sequence number of recursive build
-   * @return {PathElement} found path element or null
+   * @return best path element to previous cell.
    */
-  private calculateCurrCellMaxRecursive(isGap: boolean[], seqNo: number): PathElement {
-    if (seqNo > 2) {
-      return this.calculateCurrCell(isGap);
+  private reconstructCurrPathElement(): PathElement {
+    const pathElement = this.getBestPathElement();
+    this.idx = pathElement.startIdx;
+    if (this.isCurrCellFirst()) {
+      this.state = SimulatorState.Finished;
     }
-    isGap[seqNo] = true;
-    const withGapMax = this.calculateCurrCellMaxRecursive(isGap, seqNo + 1);
-    isGap[seqNo] = false;
-    const withoutGapMax = this.calculateCurrCellMaxRecursive(isGap, seqNo + 1);
-    if (withGapMax === null) {
-      return withoutGapMax;
+    return pathElement;
+  }
+
+  /**
+   * Returnes best path element to reach current cell.
+   *
+   * @return {PathElement} best path element to reach current cell.
+   */
+  private getBestPathElement(): PathElement {
+    let bestPathElement: PathElement = null;
+    for (let i = 0; i < this.isGapPermutations.length; ++i) {
+      const pathElement = this.getPathElement(this.isGapPermutations[i]);
+      if (pathElement !== null &&
+        (bestPathElement === null || pathElement.endCellVal > bestPathElement.endCellVal)) {
+        bestPathElement = pathElement;
+      }
     }
-    if (withoutGapMax === null) {
-      return withGapMax;
-    }
-    return withGapMax.currVal > withoutGapMax.currVal
-      ? withGapMax
-      : withoutGapMax;
+    return bestPathElement;
   }
 
   /**
    * Get value for current cell assuming that gaps are specified in given array.
    *
-   * @param {boolean[]} isGap array of sequences gaps. At least one sequence must not have a gap.
+   * @param {boolean[]} isGap array of sequences gaps.
    * @return {PathElement} found path element or null
    */
-  private calculateCurrCell(isGap: boolean[]): PathElement {
-    if (isGap.indexOf(false) < 0) {
-      return null;
-    }
+  private getPathElement(isGap: boolean[]): PathElement {
     const idx = this.idx.slice(0);
     const symbols = ['-', '-', '-'];
     for (let seqNo = 0; seqNo < 3; ++seqNo) {
       if (!isGap[seqNo]) {
         idx[seqNo] = idx[seqNo] - 1;
-        symbols[seqNo] = this.params.sequences[seqNo][this.idx[seqNo] - 1];
+        symbols[seqNo] = this.params.sequences[seqNo][idx[seqNo]];
       }
     }
-    if (!this.isValidCell(idx)) {
+    if (!this.isValidIdx(idx)) {
       return null;
     }
-    const val = this.getCell(idx) + this.params.getFitnes(symbols);
-    return new PathElement(idx.slice(0), this.idx.slice(0), symbols.slice(0), val);
-  }
-
-  /**
-   * Returns value in cell specified by indices.
-   *
-   * @param {number[]} idx indices specifing the cell
-   * @return {number} value of cell specified by indecies
-   */
-  private getCell(idx: number[]): number {
-    if (this.isValidCell(idx)) {
-      return this.cube[idx[0]][idx[1]][idx[2]];
-    }
-    return NaN;
-  }
-
-  /**
-   * Sets value in cell specified by indixes.
-   *
-   * @param {number} val value to be set in cell specified by indices
-   */
-  private setCurrCell(val: number) {
-    this.cube[this.idx[0]][this.idx[1]][this.idx[2]] = val;
+    const val = this.cube[idx[0]][idx[1]][idx[2]] + this.params.getFitnes(symbols);
+    return new PathElement(idx, this.idx.slice(0), symbols, val);
   }
 
   /**
@@ -180,12 +188,12 @@ export class Simulator {
   }
 
   /**
-   * Increment cube's cell indexes to calculate next.
+   * Transition to next cell with indices.
    */
   private incrementIdx() {
     for (let seqNo = 0; seqNo < 3; ++seqNo) {
       this.idx[seqNo]++;
-      if (this.isValidCurrIdx(seqNo)) {
+      if (this.isValidSequenceIdx(this.idx[seqNo], seqNo)) {
         return;
       }
       if (seqNo === 2) {
@@ -200,9 +208,9 @@ export class Simulator {
    *
    * @param {number[]} idx indices of cell
    */
-  private isValidCell(idx: number[]): boolean {
+  private isValidIdx(idx: number[]): boolean {
     for (let seqNo = 0; seqNo < 3; ++seqNo) {
-      if (!this.isValidIdx(idx[seqNo], seqNo)) {
+      if (!this.isValidSequenceIdx(idx[seqNo], seqNo)) {
         return false;
       }
     }
@@ -210,23 +218,13 @@ export class Simulator {
   }
 
   /**
-   * Check if current index is valid cube index for sequence.
+   * Check if given index is valid cube index for given sequence.
    *
-   * @param {number} seqNo
-   * @return {boolean}
+   * @param {number} idx idx of cube in sequence dimension
+   * @param {number} seqNo sequnce of the index
+   * @return {boolean} true if index is valid, false otherwise
    */
-  private isValidCurrIdx(seqNo: number): boolean {
-    return this.isValidIdx(this.idx[seqNo], seqNo);
-  }
-
-  /**
-   * Check if given index is valid cube index for sequence.
-   *
-   * @param {number} idx
-   * @param {number} seqNo
-   * @return {boolean}
-   */
-  private isValidIdx(idx: number, seqNo: number): boolean {
+  private isValidSequenceIdx(idx: number, seqNo: number): boolean {
     return idx >= 0 && idx <= this.params.sequences[seqNo].length;
   }
 }

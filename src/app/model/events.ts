@@ -22,7 +22,7 @@ export class CellFilledEvent extends AppEvent {
   }
 
   public toString() {
-    return this.cellToString(this.pathElement.currIdx) + ' filled with ' + this.pathElement.currVal;
+    return this.cellToString(this.pathElement.endIdx) + ' filled with ' + this.pathElement.endCellVal;
   }
 }
 
@@ -32,6 +32,6 @@ export class PathElementReconstructedEvent extends AppEvent {
   }
 
   public toString() {
-    return this.cellToString(this.pathElement.prevIdx) + ' is previous which results in ' + this.symbolsToString(this.pathElement.symbols);
+    return this.cellToString(this.pathElement.startIdx) + ' is previous which results in ' + this.symbolsToString(this.pathElement.symbols);
   }
 }
