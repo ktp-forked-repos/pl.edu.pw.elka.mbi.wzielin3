@@ -6,11 +6,11 @@ import construct = Reflect.construct;
 
 export abstract class AppEvent {
   protected cellToString(idx: number[]): string {
-    return 'Cell(' + idx[0] + ', ' + idx[1] + ', ' + idx[2] + ')';
+    return '(' + idx[0] + ', ' + idx[1] + ', ' + idx[2] + ')';
   }
 
   protected symbolsToString(idx: string[]): string {
-    return 'Symbols(' + idx[0] + ', ' + idx[1] + ', ' + idx[2] + ')';
+    return '(' + idx[0] + ', ' + idx[1] + ', ' + idx[2] + ')';
   }
 
   public abstract toString(): string;
@@ -25,7 +25,8 @@ export class CellFilledEvent extends AppEvent {
   }
 
   public toString(): string {
-    return this.cellToString(this.pathElement.endIdx) + ' filled with ' + this.pathElement.endCellVal;
+    return 'Komórka ' + this.cellToString(this.pathElement.endIdx) +
+      ' wypełniona wartością ' + this.pathElement.endCellVal;
   }
 }
 
@@ -38,7 +39,8 @@ export class PathElementReconstructedEvent extends AppEvent {
   }
 
   public toString(): string {
-    return this.cellToString(this.pathElement.startIdx) + ' is previous which results in ' + this.symbolsToString(this.pathElement.symbols);
+    return 'Komórka ' + this.cellToString(this.pathElement.startIdx) +
+      ' jest poprzednia, co oznacza symbole ' + this.symbolsToString(this.pathElement.symbols);
   }
 }
 
@@ -51,9 +53,9 @@ export class SimulationFinishedEvent extends AppEvent {
   }
 
   public toString(): string {
-    let result = 'Simulation finished with alignment:\n';
+    let result = 'Symulacja zakończona dopasowaniem:\n';
     for (let i = 0; i < 3; ++i) {
-      result += 'Sequence ' + (i + 1) + ': ' + this.getSequence(i) + '\n';
+      result += 'Sekwencja ' + (i + 1) + ': ' + this.getSequence(i) + '\n';
     }
     return result;
   }

@@ -1,19 +1,43 @@
-<div fxLayout="row">
-  <div fxFlex="50%" class="margin-auto">
-    <app-simulation-editor
-      (onStartedSimulation)="startSimulation($event)"
-      (onStepCliked)="step($event)"
-      (onSkipAllStepsClicked)="skipAllSteps($event)">
-    </app-simulation-editor>
-  </div>
-  <div fxFlex="50%" class="margin-auto" *ngIf="simulator != null">
-    <app-algorithm-demo></app-algorithm-demo>
-  </div>
-</div>
-<mat-card class="top-level-card">
-  <mat-form-field class="form-field">
-    <textarea matInput [ngModel]="eventLog" rows="20" title="Historia zdarzeń"></textarea>
-  </mat-form-field>
-</mat-card>
+<mat-tab-group>
+  <mat-tab label="Symulator">
+    <div fxLayout="row">
+      <div fxFlex="50%" class="margin-auto">
+        <app-simulation-editor
+          (onStartedSimulation)="startSimulation($event)"
+          (onStepCliked)="step($event)"
+          (onSkipAllStepsClicked)="skipAllSteps($event)">
+        </app-simulation-editor>
+      </div>
+      <div fxFlex="50%" class="margin-auto" *ngIf="simulator != null">
+        <app-algorithm-demo></app-algorithm-demo>
+      </div>
+    </div>
+    <mat-card class="top-level-card" *ngIf="simulator != null">
+      <mat-card-title>Historia zdarzeń</mat-card-title>
+      <mat-card-content>
+        <mat-form-field class="form-field" style="width:100%">
+          <textarea matInput [ngModel]="eventLog" rows="20" title="Historia zdarzeń" disabled style="color:black"></textarea>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
 
-
+  <mat-tab label="O projekcie">
+    <mat-card class="top-level-card">
+      <mat-card-title>O projekcie</mat-card-title>
+      <mat-card-content>
+        <p>
+          Projekt został wykonany w ramach przedmiotu Metody Bioinformatyki w semestrze 2017Z na Wydziale Elektroniki
+          i Technik Informacyjnych Politechniki Warszawskiej. Prowadzącym projekt był dr hab. inż. Robert Nowak,
+          a w skład zespołu projektowego wchodził Łukasz Szymczyk i Wojciech Zieliński.
+        </p>
+        <p>
+          W ramach projektu należało napisać aplikację, która pozwala zrozumieć działanie algorytmu znajdującego
+          uliniowienie trzech sekwencji metodą programowania dynamicznego. Użytkownik może wprowadzić własne dane
+          i śledzić (krok po kroku) sposób wykonywania obliczeń.
+        </p>
+        <a mat-raised-button color="primary" href="https://github.com/lukasz936/eiti_mbi_sequence_alignment">Dokumentacja</a>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

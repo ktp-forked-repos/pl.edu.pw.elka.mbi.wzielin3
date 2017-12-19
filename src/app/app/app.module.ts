@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule, MatTableModule} from '@angular/material';
+import {MatCardModule, MatTableModule, MatTabsModule, MatToolbarModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
@@ -23,7 +23,7 @@ import {SimulationDemoComponent} from '../simulation-demo/simulation-demo.compon
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule,
     MatInputModule, MatButtonModule, MatCardModule, MatTableModule,
-    FlexLayoutModule
+    FlexLayoutModule, MatToolbarModule, MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
