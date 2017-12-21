@@ -8,11 +8,11 @@
           (onSkipAllStepsClicked)="skipAllSteps($event)">
         </app-simulation-editor>
       </div>
-      <div fxFlex="50%" class="margin-auto" *ngIf="simulator != null">
+      <div fxFlex="50%" class="margin-auto">
         <app-algorithm-demo></app-algorithm-demo>
       </div>
     </div>
-    <mat-card class="top-level-card" *ngIf="simulator != null">
+    <mat-card class="top-level-card">
       <mat-card-title>Historia zdarzeń</mat-card-title>
       <mat-card-content>
         <mat-form-field class="form-field" style="width:100%">

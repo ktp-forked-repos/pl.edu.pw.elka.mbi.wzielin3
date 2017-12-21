@@ -46,7 +46,7 @@ export class SequenceInputDirective {
    * @returns {boolean}
    */
   isAllowed(text: string): boolean {
-    return text.match(new RegExp('[^ACGT]+')).length === 0;
+    return text.match(new RegExp('[^ACGT]+')) == null;
   }
 
   /**

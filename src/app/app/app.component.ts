@@ -7,13 +7,14 @@ import {SimulationFinishedEvent} from '../model/events';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   simulator: Simulator = null;
   eventLog: string;
   simulationParams: SimulationParams;
-  @ViewChild(SimulationDemoComponent) simulatorDemoComponent;
+  @ViewChild(SimulationDemoComponent) simulatorDemoComponent: SimulationDemoComponent;
+
 
   startSimulation(event) {
     this.simulationParams = event;
@@ -28,6 +29,7 @@ export class AppComponent {
       this.eventLog += eventStep.toString() + '\n';
     }
     return eventStep;
+
   }
 
   skipAllSteps() {

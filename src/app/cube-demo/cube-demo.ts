@@ -1,27 +1,46 @@
 export class Cube {
 
-  private centerX = 300;
-  private centerY = 300;
-  private sizeOfCell = 20;
-  private diagonalSizeOfCell = 1.36 * this.sizeOfCell;
+  private width = 800;
+  private height = 600;
+  private centerX;
+  private centerY;
+  private sizeOfCell;
+  private diagonalSizeOfCell;
+  private fontSize;
+  private lengthX;
+  private legnthY;
+  private lengthZ;
 
-  constructor(sequences: string[], private ctx: CanvasRenderingContext2D) {
-    this.drawInterruptedEgdes(sequences[0].length, sequences[1].length, sequences[2].length);
-    this.drawEdges(sequences[0].length, sequences[1].length, sequences[2].length);
-    this.addSequenceElements(sequences);
+  constructor(private sequences: string[], private ctx: CanvasRenderingContext2D) {
+    this.clearCanvas();
+    this.calculateParameters();
+    this.drawInterruptedEgdes();
+    this.drawEdges();
+    this.addSequenceElements();
   }
 
-  calculateSizeOfCell(sequences: string[]) {
-    //this.
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
-  drawInterruptedEgdes(lengthX, lengthY, lengthZ) {
-    this.drawVerticalLine(this.centerX, this.centerY, lengthX, true);
-    this.drawRightDiagonalLine(this.centerX, this.centerY, lengthY, true);
-    this.drawLeftDiagonalLine(this.centerX, this.centerY, lengthZ, true);
+  calculateParameters() {
+    this.sizeOfCell = 600 / (Math.max(this.sequences[0].length, this.sequences[1].length, this.sequences[2].length) * 3);
+    this.diagonalSizeOfCell = 1.36 * this.sizeOfCell;
+    this.centerX = this.width / 2;
+    this.centerY = this.height / 2;
+    this.fontSize = this.sizeOfCell / 1.5;
   }
 
-  drawEdges(lengthX, lengthY, lengthZ) {
+  drawInterruptedEgdes() {
+    this.drawVerticalLine(this.centerX, this.centerY, this.sequences[0].length + 1, true);
+    this.drawRightDiagonalLine(this.centerX, this.centerY, this.sequences[1].length + 1, true);
+    this.drawLeftDiagonalLine(this.centerX, this.centerY, this.sequences[2].length + 1, true);
+  }
+
+  drawEdges() {
+    const lengthX = this.sequences[0].length + 1;
+    const lengthY = this.sequences[1].length + 1;
+    const lengthZ = this.sequences[2].length + 1;
     for (let i = 0; i < lengthX; ++i) {
       const y = this.centerY + this.sizeOfCell * (i + 1);
       this.drawRightDiagonalLine(this.centerX, y, lengthY, false);
@@ -85,8 +104,35 @@ export class Cube {
     this.ctx.stroke();
   }
 
-  addSequenceElements(sequences) {
+  addElementsBySequence(angle, sequenceNumber) {
+    this.ctx.font = 'bold ' + this.fontSize + 'px Arial';
+    this.ctx.textAlign = 'center';
+    const angleRadian = Math.PI * angle / 180;
+    for (let i = 0; i < this.sequences[sequenceNumber].length; ++i) {
+      let r;
+      if (angle !== 90) {
+        r = this.diagonalSizeOfCell * (i + 1);
+      } else {
+        r = this.sizeOfCell * (i + 1);
+      }
+      const rectX = this.centerX + r * Math.cos(angleRadian);
+      const rectY = this.centerY + r * Math.sin(angleRadian);
+      this.ctx.beginPath();
+      this.ctx.rect(rectX - this.fontSize / 2, rectY - this.fontSize / 2, this.fontSize, this.fontSize);
+      this.ctx.fillStyle = 'white';
+      this.ctx.fill();
+      this.ctx.strokeStyle = 'white';
+      this.ctx.stroke();
+      this.ctx.fillStyle = 'black';
+      this.ctx.fillText(this.sequences[sequenceNumber][i], rectX, rectY + this.fontSize / 2);
+    }
+    this.ctx.strokeStyle = 'black';
+  }
 
+  addSequenceElements() {
+    this.addElementsBySequence(90, 0);
+    this.addElementsBySequence(345, 1);
+    this.addElementsBySequence(195, 2);
   }
 
 }
