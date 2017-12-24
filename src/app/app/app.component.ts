@@ -25,14 +25,15 @@ export class AppComponent {
 
   step() {
     const eventStep = this.simulator.step();
+    this.simulatorDemoComponent.putCellValue(eventStep);
     if (eventStep !== null) {
       this.eventLog += eventStep.toString() + '\n';
     }
     return eventStep;
-
   }
 
   skipAllSteps() {
-    while (!(this.step() instanceof SimulationFinishedEvent)) { }
+    while (!(this.step() instanceof SimulationFinishedEvent)) {
+    }
   }
 }

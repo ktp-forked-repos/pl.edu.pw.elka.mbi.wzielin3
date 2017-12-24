@@ -19,4 +19,11 @@ export class SimulationDemoComponent {
     this.cube = new Cube(params.sequences, this.canvasCube.nativeElement.getContext('2d'));
   }
 
+  putCellValue(eventStep) {
+    if (eventStep.pathElement.endIdx[2] === 0) {
+      this.cube.putCellValue(eventStep.pathElement.endIdx[0], eventStep.pathElement.endIdx[1],
+        eventStep.pathElement.endIdx[2], eventStep.pathElement.endCellVal);
+    }
+  }
+
 }
