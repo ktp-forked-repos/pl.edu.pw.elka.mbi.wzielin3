@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {Cube} from '../cube-demo/cube-demo';
+import {Cube} from '../graphic-demo/cube-demo';
 
 @Component({
   selector: 'app-algorithm-demo',
@@ -8,8 +8,8 @@ import {Cube} from '../cube-demo/cube-demo';
 })
 export class SimulationDemoComponent {
   cube: Cube = null;
-  @ViewChild('simulationDemo') canvasCube: ElementRef;
-
+  @ViewChild('cubeDemo') canvasCube: ElementRef;
+  @ViewChild('cubeWallDemo') canvasCubeWall: ElementRef;
 
   constructor() {
 
@@ -21,7 +21,7 @@ export class SimulationDemoComponent {
 
   putCellValue(eventStep) {
     if (eventStep.pathElement.endIdx[2] === 0) {
-      this.cube.putCellValue(eventStep.pathElement.endIdx[0], eventStep.pathElement.endIdx[1],
+      this.cube.addCellValue(eventStep.pathElement.endIdx[0], eventStep.pathElement.endIdx[1],
         eventStep.pathElement.endIdx[2], eventStep.pathElement.endCellVal);
     }
   }
