@@ -23,7 +23,7 @@ export class Cube {
     this.drawInterruptedEdges();
     this.drawEdges();
     this.addSequenceElements();
-    this.cubeGraphic.blacklightWall(this.centerX, this.centerY, this.lengthX, this.lengthY);
+    this.blacklightWall(0);
     this.addCellValue(0, 0, 0, 0);
   }
 
@@ -89,15 +89,43 @@ export class Cube {
   }
 
   addCellValue(x, y, z, value) {
-    const angle = Math.PI * 345 / 180;
-    const pointRightR = this.cellDiagonalSize * (y + 1);
-    const pointLeftR = this.cellDiagonalSize * y;
-    const pointRightX = this.centerX + pointRightR * Math.cos(angle);
-    const pointRightY = this.centerY + this.cellSize * (x + 1) + pointRightR * Math.sin(angle);
-    const pointLeftX = this.centerX + pointLeftR * Math.cos(angle);
-    const pointLeftY = this.centerY + this.cellSize * x + pointLeftR * Math.sin(angle);
-    this.cubeGraphic.addTextValue(pointLeftX, pointLeftY, pointRightX - pointLeftX, pointRightY - pointLeftY, value);
+    if (z === 0) {
+      const angle = Math.PI * 345 / 180;
+      const point2_R = this.cellDiagonalSize * (y + 1);
+      const point1_R = this.cellDiagonalSize * y;
+      const point2_X = this.centerX + point2_R * Math.cos(angle);
+      const point2_Y = this.centerY + this.cellSize * (x + 1) + point2_R * Math.sin(angle);
+      const point1_X = this.centerX + point1_R * Math.cos(angle);
+      const point1_Y = this.centerY + this.cellSize * x + point1_R * Math.sin(angle);
+      this.cubeGraphic.addTextValue(point1_X + (point2_X - point1_X) / 2, point1_Y + (point2_Y - point1_Y), value);
+    }
+    if (y === 0 && z !== 0) {
+      const angle = Math.PI * 195 / 180;
+      const point2_R = this.cellDiagonalSize * (z + 1);
+      const point1_R = this.cellDiagonalSize * z;
+      const point2_X = this.centerX + point2_R * Math.cos(angle);
+      const point2_Y = this.centerY + this.cellSize * (x + 1) + point2_R * Math.sin(angle);
+      const point1_X = this.centerX + point1_R * Math.cos(angle);
+      const point1_Y = this.centerY + this.cellSize * x + point1_R * Math.sin(angle);
+      this.cubeGraphic.addTextValue(point1_X + (point2_X - point1_X) / 2, point1_Y + (point2_Y - point1_Y), value);
+    }
+    if (x === 0 && y !== 0 && z !== 0) {
+      const angleRight = Math.PI * 345 / 180;
+      const angleLeft = Math.PI * 195 / 180;
+      const pointRight_R = this.cellDiagonalSize * y;
+      const pointLeft1_R = this.cellDiagonalSize * z;
+      const pointLeft2_R = this.cellDiagonalSize * (z + 1);
+      const point1_X = this.centerX + pointLeft1_R * Math.cos(angleLeft) + pointRight_R * Math.cos(angleRight);
+      const point1_Y = this.centerY + pointLeft1_R * Math.sin(angleLeft) + pointRight_R * Math.sin(angleRight);
+      const point2_Y = this.centerY + pointLeft2_R * Math.sin(angleLeft) + pointRight_R * Math.sin(angleRight);
+      this.cubeGraphic.addTextValue(point1_X, point1_Y + (point2_Y - point1_Y) / 3, value);
+    }
   }
 
+  blacklightWall(z) {
+    const angle = Math.PI * 195 / 180;
+    const r = this.cellDiagonalSize * z;
+    this.cubeGraphic.blacklightWall(this.centerX + r * Math.cos(angle), this.centerY + r * Math.sin(angle), this.lengthX, this.lengthY);
+  }
 }
 

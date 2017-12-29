@@ -14,7 +14,7 @@ export class Graphic {
 
   calculateParameters() {
     this.seqFontSize = this.cellSize / 1.5;
-    this.valFontSize = this.cellSize / 1.8;
+    this.valFontSize = this.cellSize / 2;
     this.cellDiagonalSize = this.diagonalFactor * this.cellSize;
   }
 
@@ -49,11 +49,11 @@ export class Graphic {
     this.ctx.strokeStyle = 'black';
   }
 
-  addTextValue(x, y, lengthX, lengthY, text) {
+  addTextValue(x, y, text) {
     this.ctx.textAlign = 'center';
     this.ctx.font = this.valFontSize + 'px Arial';
     this.ctx.fillStyle = 'black';
-    this.ctx.fillText(text, x + lengthX / 2, y + lengthY);
+    this.ctx.fillText(text, x , y);
   }
 
   blacklightWall(x, y, lengthX, lengthY) {

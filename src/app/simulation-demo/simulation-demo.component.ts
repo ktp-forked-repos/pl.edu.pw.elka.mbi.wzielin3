@@ -20,10 +20,10 @@ export class SimulationDemoComponent {
   }
 
   putCellValue(eventStep) {
-    if (eventStep.pathElement.endIdx[2] === 0) {
-      this.cube.addCellValue(eventStep.pathElement.endIdx[0], eventStep.pathElement.endIdx[1],
-        eventStep.pathElement.endIdx[2], eventStep.pathElement.endCellVal);
+    this.cube.addCellValue(eventStep.pathElement.endIdx[0], eventStep.pathElement.endIdx[1],
+      eventStep.pathElement.endIdx[2], eventStep.pathElement.endCellVal);
+    if (eventStep.pathElement.endIdx[0] === 0 && eventStep.pathElement.endIdx[1] === 0) {
+      this.cube.blacklightWall(eventStep.pathElement.endIdx[2]);
     }
   }
-
 }
