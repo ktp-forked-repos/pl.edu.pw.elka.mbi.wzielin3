@@ -29,7 +29,7 @@ export class Simulator {
   /**
    * Init cube, cube indexes and state.
    */
-  constructor (private readonly params: SimulationParams) {
+  constructor(private readonly params: SimulationParams) {
     // init state
     this.state = SimulatorState.CalculatingCells;
     // init empty cube
@@ -91,10 +91,14 @@ export class Simulator {
    */
   public step(): AppEvent {
     switch (this.state) {
-      case SimulatorState.CalculatingCells: return new CellFilledEvent(this.calculateCurrCell());
-      case SimulatorState.ReconstructingPath: return new PathElementReconstructedEvent(this.reconstructCurrPathElement());
-      case SimulatorState.Finished: return new SimulationFinishedEvent(this.reconstructedPath);
-      default: throw { msg: 'Unknown simulation state ' + this.state };
+      case SimulatorState.CalculatingCells:
+        return new CellFilledEvent(this.calculateCurrCell());
+      case SimulatorState.ReconstructingPath:
+        return new PathElementReconstructedEvent(this.reconstructCurrPathElement());
+      case SimulatorState.Finished:
+        return new SimulationFinishedEvent(this.reconstructedPath);
+      default:
+        throw {msg: 'Unknown simulation state ' + this.state};
     }
   }
 
@@ -203,7 +207,7 @@ export class Simulator {
         return;
       }
       if (seqNo === 2) {
-        throw { msg: 'Cannot increment further - last cell' };
+        throw {msg: 'Cannot increment further - last cell'};
       }
       this.idx[seqNo] = 0;
     }
@@ -232,5 +236,9 @@ export class Simulator {
    */
   private isValidSequenceIdx(idx: number, seqNo: number): boolean {
     return idx >= 0 && idx <= this.params.sequences[seqNo].length;
+  }
+
+  public getCubeValue(idxSeq1, idxSeq2, idxSeq3) {
+    return this.cube[idxSeq1][idxSeq2][idxSeq3];
   }
 }

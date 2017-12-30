@@ -22,8 +22,6 @@ export class Cube {
     this.drawInterruptedEdges();
     this.drawEdges();
     this.addSequenceElements();
-    this.addCellValue(0, 0, 0, 0);
-    this.blacklightWall(0);
   }
 
   clearCanvas() {
