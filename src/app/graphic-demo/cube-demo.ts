@@ -18,13 +18,16 @@ export class Cube {
   constructor(private sequences: string[], ctx: CanvasRenderingContext2D) {
     this.calculateParameters();
     this.cubeGraphic = new Graphic(500, 800, this.cellSize, this.diagonalFactor, ctx);
-    this.cubeGraphic.clearCanvas();
-
+    this.clearCanvas();
     this.drawInterruptedEdges();
     this.drawEdges();
     this.addSequenceElements();
-    this.blacklightWall(0);
     this.addCellValue(0, 0, 0, 0);
+    this.blacklightWall(0);
+  }
+
+  clearCanvas() {
+    this.cubeGraphic.clearCanvas();
   }
 
   calculateParameters() {

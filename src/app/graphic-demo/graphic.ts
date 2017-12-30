@@ -53,7 +53,7 @@ export class Graphic {
     this.ctx.textAlign = 'center';
     this.ctx.font = this.valFontSize + 'px Arial';
     this.ctx.fillStyle = 'black';
-    this.ctx.fillText(text, x , y);
+    this.ctx.fillText(text, x, y);
   }
 
   blacklightWall(x, y, lengthX, lengthY) {
