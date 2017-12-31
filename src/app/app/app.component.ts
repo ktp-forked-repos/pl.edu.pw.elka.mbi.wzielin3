@@ -33,7 +33,8 @@ export class AppComponent {
   }
 
   skipAllSteps() {
-    while (!(this.step() instanceof SimulationFinishedEvent)) {
+    while (!(this.simulator.step() instanceof SimulationFinishedEvent)) {
     }
+    this.simulatorDemoComponent.putAllCellsValues();
   }
 }

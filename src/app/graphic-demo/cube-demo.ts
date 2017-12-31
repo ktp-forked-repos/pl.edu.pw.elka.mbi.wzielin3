@@ -17,7 +17,7 @@ export class Cube {
 
   constructor(private sequences: string[], ctx: CanvasRenderingContext2D) {
     this.calculateParameters();
-    this.cubeGraphic = new Graphic(500, 800, this.cellSize, this.diagonalFactor, ctx);
+    this.cubeGraphic = new Graphic(this.height, this.width, this.cellSize, this.diagonalFactor, ctx);
     this.clearCanvas();
     this.drawInterruptedEdges();
     this.drawEdges();
