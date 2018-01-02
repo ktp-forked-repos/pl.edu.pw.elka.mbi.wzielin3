@@ -29,7 +29,7 @@ export class Cube {
   }
 
   calculateParameters() {
-    this.cellSize = this.height / (Math.max(this.sequences[0].length, this.sequences[1].length, this.sequences[2].length) * 2.5);
+    this.cellSize = this.height / (Math.max(this.sequences[0].length, this.sequences[1].length, this.sequences[2].length) * 3);
     this.cellDiagonalSize = this.diagonalFactor * this.cellSize;
     this.centerX = this.width / 2;
     this.centerY = this.height / 2;

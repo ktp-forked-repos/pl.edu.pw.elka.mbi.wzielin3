@@ -4,9 +4,9 @@ export class CubeWall {
 
   private cubeWallGraphic;
   private cellSize;
-  private startX = 260;
-  private startY = 20;
-  private height = 300;
+  private startX = 280;
+  private startY = 10;
+  private height = 250;
   private width = 800;
 
   private lengthX;
@@ -28,7 +28,7 @@ export class CubeWall {
   calculateParameters() {
     this.lengthX = this.sequences[0].length + 1;
     this.lengthY = this.sequences[1].length + 1;
-    this.cellSize = 280 / (Math.max(this.lengthX, this.lengthY));
+    this.cellSize = 240 / (Math.max(this.lengthX, this.lengthY));
   }
 
   drawInterruptedEdges() {
@@ -68,7 +68,6 @@ export class CubeWall {
   addCellValue(x, y, value) {
     const pointX = this.startX + this.cellSize * y;
     const pointY = this.startY + this.cellSize * x;
-
     this.cubeWallGraphic.addTextValue(pointX + this.cellSize / 2, pointY + this.cellSize * 3 / 4, value);
   }
 }

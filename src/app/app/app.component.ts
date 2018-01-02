@@ -21,11 +21,16 @@ export class AppComponent {
     this.simulator = new Simulator(this.simulationParams);
     this.eventLog = '';
     this.simulatorDemoComponent.createCube(this.simulationParams);
+    this.simulatorDemoComponent.setSimulationFinished(false);
   }
 
   step() {
     const eventStep = this.simulator.step();
     this.simulatorDemoComponent.putCellValue(eventStep);
+    if (this.isLastStep(eventStep)) {
+      this.simulatorDemoComponent.setSimulationFinished(true);
+
+    }
     if (eventStep !== null) {
       this.eventLog += eventStep.toString() + '\n';
     }
@@ -36,5 +41,13 @@ export class AppComponent {
     while (!(this.simulator.step() instanceof SimulationFinishedEvent)) {
     }
     this.simulatorDemoComponent.putAllCellsValues();
+    this.simulatorDemoComponent.showCubeWallDetails(this.simulationParams.sequences[2].length);
+    this.simulatorDemoComponent.setSimulationFinished(true);
+  }
+
+  isLastStep(eventStep) {
+    return eventStep.pathElement.endIdx[0] === this.simulationParams.sequences[0].length &&
+      eventStep.pathElement.endIdx[1] === this.simulationParams.sequences[1].length &&
+      eventStep.pathElement.endIdx[2] === this.simulationParams.sequences[2].length;
   }
 }
