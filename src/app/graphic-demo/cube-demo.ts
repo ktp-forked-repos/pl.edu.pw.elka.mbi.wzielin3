@@ -123,10 +123,10 @@ export class Cube {
     }
   }
 
-  blacklightWall(z) {
+  backlightWall(z) {
     const angle = Math.PI * 195 / 180;
     const r = this.cellDiagonalSize * z;
-    this.cubeGraphic.blacklightWall(this.centerX + r * Math.cos(angle), this.centerY + r * Math.sin(angle), this.lengthX, this.lengthY);
+    this.cubeGraphic.backlightWall(this.centerX + r * Math.cos(angle), this.centerY + r * Math.sin(angle), this.lengthX, this.lengthY);
   }
 }
 

@@ -2,7 +2,7 @@ import {SimulationParams} from './simulation-params';
 import {AppEvent, CellFilledEvent, PathElementReconstructedEvent, SimulationFinishedEvent} from './events';
 import {PathElement} from './path-element';
 
-enum SimulatorState {
+export enum SimulatorState {
   /** Simulator is filling cube cells */
   CalculatingCells,
   /** Based on cube cells simulator is calculating best path */
@@ -240,5 +240,13 @@ export class Simulator {
 
   public getCubeValue(idxSeq1, idxSeq2, idxSeq3) {
     return this.cube[idxSeq1][idxSeq2][idxSeq3];
+  }
+
+  public getReconstructedPath() {
+    return this.reconstructedPath;
+  }
+
+  public getStatus() {
+    return this.state;
   }
 }

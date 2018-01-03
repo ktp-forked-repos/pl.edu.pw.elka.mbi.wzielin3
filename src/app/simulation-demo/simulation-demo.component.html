@@ -1,8 +1,8 @@
 <mat-card class="top-level-card">
   <mat-card-title>Demonstracja działania algorytmu</mat-card-title>
   <canvas #cubeDemo id="canvasCube"  width="800px" height="500px"></canvas>
-  <button mat-raised-button color="primary" (click)="nextWall()" *ngIf="simulationFinished"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-  <button mat-raised-button color="primary" (click)="previousWall()" style="float:right" *ngIf="simulationFinished"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+  <button mat-raised-button color="primary" (click)="nextWall()" [disabled]="!isSimulationFinished()"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+  <button mat-raised-button color="primary" (click)="previousWall()" style="float:right" [disabled]="!isSimulationFinished()"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
   <canvas #cubeWallDemo id="canvasCubeWall"  width="800px" height="250px"></canvas>
 </mat-card>
 

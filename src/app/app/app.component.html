@@ -5,21 +5,28 @@
         <app-simulation-editor
           (onStartedSimulation)="startSimulation($event)"
           (onStepCliked)="step($event)"
-          (onSkipAllStepsClicked)="skipAllSteps($event)">
+          (onSkipAllStepsClicked)="skipAllSteps($event)"
+          [(simulator)]="simulator">
         </app-simulation-editor>
+        <mat-card class="down-level-card" *ngIf="isSimulationFinished()">
+          <mat-card-title>Wynik - dopasowanie sekwencji</mat-card-title>
+          <mat-card-content>
+            <div fxLayout="row">
+              <div fxFlex="100%" class="score">Sekwencja 1: {{results[0]}}</div>
+            </div>
+            <div fxLayout="row">
+              <div fxFlex="100%" class="score">Sekwencja 2: {{results[1]}}</div>
+            </div>
+            <div fxLayout="row">
+              <div fxFlex="100%" class="score">Sekwencja 3: {{results[2]}}</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
       </div>
       <div fxFlex="50%" class="margin-auto">
         <app-algorithm-demo [(simulator)]="simulator"></app-algorithm-demo>
       </div>
     </div>
-    <mat-card class="top-level-card">
-      <mat-card-title>Historia zdarzeń</mat-card-title>
-      <mat-card-content>
-        <mat-form-field class="form-field" style="width:100%">
-          <textarea matInput [ngModel]="eventLog" rows="20" title="Historia zdarzeń" disabled style="color:black"></textarea>
-        </mat-form-field>
-      </mat-card-content>
-    </mat-card>
   </mat-tab>
 
   <mat-tab label="O projekcie">
@@ -41,3 +48,4 @@
     </mat-card>
   </mat-tab>
 </mat-tab-group>
+

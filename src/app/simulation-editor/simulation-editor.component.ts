@@ -1,5 +1,6 @@
-import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {SimulationParams} from '../model/simulation-params';
+import {Simulator, SimulatorState} from "../model/simulator";
 
 @Component({
   selector: 'app-simulation-editor',
@@ -10,7 +11,7 @@ export class SimulationEditorComponent {
 
   simulationParams: SimulationParams = new SimulationParams();
   simulationStarted = false;
-
+  @Input() simulator: Simulator;
   @Output() onStartedSimulation: EventEmitter<SimulationParams> = new EventEmitter();
   @Output() onStepCliked: EventEmitter<string> = new EventEmitter();
   @Output() onSkipAllStepsClicked: EventEmitter<string> = new EventEmitter();
@@ -37,5 +38,12 @@ export class SimulationEditorComponent {
    */
   skipAllSteps() {
     this.onSkipAllStepsClicked.emit();
+  }
+
+  isSimulationFinished() {
+    if (this.simulator !== null) {
+      return this.simulator.getStatus() === SimulatorState.Finished;
+    }
+    return false;
   }
 }

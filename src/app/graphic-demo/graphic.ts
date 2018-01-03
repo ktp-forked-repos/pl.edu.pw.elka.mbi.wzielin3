@@ -14,7 +14,7 @@ export class Graphic {
 
   calculateParameters() {
     this.seqFontSize = this.cellSize / 1.5;
-    this.valFontSize = this.cellSize / 2;
+    this.valFontSize = this.cellSize / 1.9;
     this.cellDiagonalSize = this.diagonalFactor * this.cellSize;
   }
 
@@ -56,7 +56,7 @@ export class Graphic {
     this.ctx.fillText(text, x, y);
   }
 
-  blacklightWall(x, y, lengthX, lengthY) {
+  backlightWall(x, y, lengthX, lengthY) {
     const currX: number[] = [];
     const currY: number[] = [];
     const leftDiagAngle = Math.PI * 195 / 180;
@@ -76,6 +76,26 @@ export class Graphic {
       y = y + lengthX * this.cellSize;
       y = y + lengthY * this.cellDiagonalSize * Math.sin(rightDiagAngle);
     }
+    this.ctx.fillStyle = 'rgba(63, 81, 181, 0.5)';
+    this.ctx.beginPath();
+    this.ctx.moveTo(x, y);
+    for (let i = 0; i < currX.length; ++i) {
+      this.ctx.lineTo(currX[i], currY[i]);
+    }
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+
+  backlightCell(x, y) {
+    const currX: number[] = [];
+    const currY: number[] = [];
+    const rightDiagAngle = Math.PI * 345 / 180;
+    currX.push(x + this.cellDiagonalSize * Math.cos(rightDiagAngle));
+    currY.push(y + this.cellDiagonalSize * Math.sin(rightDiagAngle));
+    currX.push(currX[0]);
+    currY.push(currY[0] + this.cellSize);
+    currX.push(currX[1] - this.cellDiagonalSize * Math.cos(rightDiagAngle));
+    currY.push(currY[1] - this.cellDiagonalSize * Math.sin(rightDiagAngle));
     this.ctx.fillStyle = 'rgba(63, 81, 181, 0.5)';
     this.ctx.beginPath();
     this.ctx.moveTo(x, y);

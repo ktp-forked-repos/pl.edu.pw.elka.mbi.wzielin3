@@ -1,8 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
-import {Simulator} from '../model/simulator';
+import {Simulator, SimulatorState} from '../model/simulator';
 import {SimulationDemoComponent} from '../simulation-demo/simulation-demo.component';
 import {SimulationParams} from '../model/simulation-params';
-import {SimulationFinishedEvent} from '../model/events';
+import {CellFilledEvent, PathElementReconstructedEvent, SimulationFinishedEvent} from '../model/events';
 
 @Component({
   selector: 'app-root',
@@ -11,28 +11,24 @@ import {SimulationFinishedEvent} from '../model/events';
 })
 export class AppComponent {
   simulator: Simulator = null;
-  eventLog: string;
   simulationParams: SimulationParams;
+  results: string[] = [];
   @ViewChild(SimulationDemoComponent) simulatorDemoComponent: SimulationDemoComponent;
-
 
   startSimulation(event) {
     this.simulationParams = event;
     this.simulator = new Simulator(this.simulationParams);
-    this.eventLog = '';
     this.simulatorDemoComponent.createCube(this.simulationParams);
-    this.simulatorDemoComponent.setSimulationFinished(false);
   }
 
   step() {
     const eventStep = this.simulator.step();
-    this.simulatorDemoComponent.putCellValue(eventStep);
-    if (this.isLastStep(eventStep)) {
-      this.simulatorDemoComponent.setSimulationFinished(true);
-
-    }
-    if (eventStep !== null) {
-      this.eventLog += eventStep.toString() + '\n';
+    if (eventStep instanceof CellFilledEvent) {
+      this.simulatorDemoComponent.fillCubeCell(eventStep);
+    } else if (eventStep instanceof PathElementReconstructedEvent) {
+      this.simulatorDemoComponent.reconstructPath(eventStep);
+    } else if (eventStep instanceof SimulationFinishedEvent) {
+      this.showResult();
     }
     return eventStep;
   }
@@ -41,13 +37,27 @@ export class AppComponent {
     while (!(this.simulator.step() instanceof SimulationFinishedEvent)) {
     }
     this.simulatorDemoComponent.putAllCellsValues();
-    this.simulatorDemoComponent.showCubeWallDetails(this.simulationParams.sequences[2].length);
-    this.simulatorDemoComponent.setSimulationFinished(true);
+    this.simulatorDemoComponent.showCubeWallDetails(0, true);
+    this.showResult();
   }
 
-  isLastStep(eventStep) {
-    return eventStep.pathElement.endIdx[0] === this.simulationParams.sequences[0].length &&
-      eventStep.pathElement.endIdx[1] === this.simulationParams.sequences[1].length &&
-      eventStep.pathElement.endIdx[2] === this.simulationParams.sequences[2].length;
+  isSimulationFinished() {
+    if (this.simulator !== null) {
+      return this.simulator.getStatus() === SimulatorState.Finished;
+    }
+    return false;
+  }
+
+  showResult() {
+    this.results = [];
+    const reconstructedPath = this.simulator.getReconstructedPath();
+    for (let i = 0; i < reconstructedPath.length; ++i) {
+      for (let j = 0; j < this.simulationParams.sequences.length; ++j) {
+        if (i === 0) {
+          this.results.push('');
+        }
+        this.results[j] += reconstructedPath[i].symbols[j];
+      }
+    }
   }
 }

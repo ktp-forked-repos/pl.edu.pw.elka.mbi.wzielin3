@@ -1,4 +1,4 @@
-<mat-card class="top-level-card" >
+<mat-card class="top-level-card">
   <mat-card-title>Parametry symulacji</mat-card-title>
   <mat-card>
     <mat-card-title>Sekwencje</mat-card-title>
@@ -30,8 +30,9 @@
   </mat-card>
   <div class="button-row">
     <button mat-raised-button color="primary" (click)="startSimulation()">Nowa symulacja</button>
-    <button mat-raised-button color="primary" (click)="step()" *ngIf="simulationStarted">Krok symulacji</button>
-    <button mat-raised-button color="primary" (click)="skipAllSteps()" *ngIf="simulationStarted">Pomiń kroki symulacji
+    <button mat-raised-button color="primary" (click)="step()" *ngIf="simulationStarted" [disabled]="isSimulationFinished()">Krok symulacji
+    </button>
+    <button mat-raised-button color="primary" (click)="skipAllSteps()" *ngIf="simulationStarted" [disabled]="isSimulationFinished()">Pomiń kroki symulacji
     </button>
   </div>
 </mat-card>
