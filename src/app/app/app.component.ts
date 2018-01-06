@@ -35,10 +35,17 @@ export class AppComponent {
   }
 
   skipAllSteps() {
-    while (!(this.simulator.step() instanceof SimulationFinishedEvent)) {
-    }
+    while (!(this.simulator.step() instanceof SimulationFinishedEvent)) { }
     this.simulatorDemoComponent.putAllCellsValues();
     this.simulatorDemoComponent.showCubeWallDetails(0, true);
+    this.showResult();
+  }
+
+  skipCalculatingCells() {
+    while (this.simulator.getStatus() === SimulatorState.CalculatingCells) {
+      this.simulator.step();
+    }
+    this.simulatorDemoComponent.putAllCellsValues();
     this.showResult();
   }
 

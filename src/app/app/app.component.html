@@ -6,6 +6,7 @@
           (onStartedSimulation)="startSimulation($event)"
           (onStepCliked)="step($event)"
           (onSkipAllStepsClicked)="skipAllSteps($event)"
+          (onSkipCalculatingCellsClicked)="skipCalculatingCells($event)"
           [(simulator)]="simulator">
         </app-simulation-editor>
         <mat-card class="down-level-card" *ngIf="isSimulationFinished()">

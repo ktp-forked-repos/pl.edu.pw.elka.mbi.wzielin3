@@ -16,6 +16,7 @@ export class SimulationEditorComponent {
   @Output() onStartedSimulation: EventEmitter<SimulationParams> = new EventEmitter();
   @Output() onStepCliked: EventEmitter<string> = new EventEmitter();
   @Output() onSkipAllStepsClicked: EventEmitter<string> = new EventEmitter();
+  @Output() onSkipCalculatingCellsClicked: EventEmitter<string> = new EventEmitter();
 
   constructor(public snackBarError: MatSnackBar) {
   }
@@ -46,10 +47,31 @@ export class SimulationEditorComponent {
     this.onSkipAllStepsClicked.emit();
   }
 
+  /**
+   * Perform all steps until cube is filled.
+   */
+  skipCalculatingCells() {
+    this.onSkipCalculatingCellsClicked.emit();
+  }
+
+  /**
+   * Returns true if simulation is running, false otherwise.
+   */
+  isSimulationRunning() {
+    return this.simulator !== null;
+  }
+
+  /**
+   * Returns true if simulation is running and finished.
+   */
   isSimulationFinished() {
-    if (this.simulator !== null) {
-      return this.simulator.getStatus() === SimulatorState.Finished;
-    }
-    return false;
+    return this.isSimulationRunning() && this.simulator.getStatus() === SimulatorState.Finished;;
+  }
+
+  /**
+   * Returns true if simulation is running and all cube cells have been filled, false otherwise.
+   */
+  isCubeFilled() {
+    return this.isSimulationRunning() && this.simulator.getStatus() !== SimulatorState.CalculatingCells;
   }
 }
