@@ -3,43 +3,38 @@
  */
 import {PathElement} from './path-element';
 
+/**
+ * Abstract simulator event.
+ */
 export abstract class AppEvent {
-  protected cellToString(idx: number[]): string {
-    return '(' + idx[0] + ', ' + idx[1] + ', ' + idx[2] + ')';
-  }
+  // intentionally empty
+}
 
-  protected symbolsToString(idx: string[]): string {
-    return '(' + idx[0] + ', ' + idx[1] + ', ' + idx[2] + ')';
+/**
+ * Abstract event concerning path decision.
+ */
+export abstract class PathAppEvent extends AppEvent {
+  constructor(public pathElement: PathElement,
+              public allAllowedPathElements: PathElement[]) {
+    super();
   }
-
-  public abstract toString(): string;
 }
 
 /**
  * Cell has been filled with value event.
  */
-export class CellFilledEvent extends AppEvent {
-  constructor(private pathElement: PathElement) {
-    super();
-  }
-
-  public toString(): string {
-    return 'Komórka ' + this.cellToString(this.pathElement.endIdx) +
-      ' wypełniona wartością ' + this.pathElement.endCellVal;
+export class CellFilledEvent extends PathAppEvent {
+  constructor(pathElement: PathElement, allAllowedPathElements: PathElement[]) {
+    super(pathElement, allAllowedPathElements);
   }
 }
 
 /**
  * Element of the path has been reconstructed.
  */
-export class PathElementReconstructedEvent extends AppEvent {
-  constructor(private pathElement: PathElement) {
-    super();
-  }
-
-  public toString(): string {
-    return 'Komórka ' + this.cellToString(this.pathElement.startIdx) +
-      ' jest poprzednia, co oznacza symbole ' + this.symbolsToString(this.pathElement.symbols);
+export class PathElementReconstructedEvent extends PathAppEvent {
+  constructor(pathElement: PathElement, allAllowedPathElements: PathElement[]) {
+    super(pathElement, allAllowedPathElements);
   }
 }
 
@@ -49,14 +44,6 @@ export class PathElementReconstructedEvent extends AppEvent {
 export class SimulationFinishedEvent extends AppEvent {
   constructor(private path: PathElement[]) {
     super();
-  }
-
-  public toString(): string {
-    let result = 'Symulacja zakończona dopasowaniem:\n';
-    for (let i = 0; i < 3; ++i) {
-      result += 'Sekwencja ' + (i + 1) + ': ' + this.getSequence(i) + '\n';
-    }
-    return result;
   }
 
   public getSequence(i: number): string {

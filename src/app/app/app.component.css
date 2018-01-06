@@ -20,6 +20,7 @@
   text-align: left;
   font-family: monospace;
   font-size: 17px;
+  white-space: pre-line;
 }
 
 .button-row {

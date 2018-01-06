@@ -2,7 +2,10 @@ import {Component, ViewChild} from '@angular/core';
 import {Simulator, SimulatorState} from '../model/simulator';
 import {SimulationDemoComponent} from '../simulation-demo/simulation-demo.component';
 import {SimulationParams} from '../model/simulation-params';
-import {CellFilledEvent, PathElementReconstructedEvent, SimulationFinishedEvent} from '../model/events';
+import {
+  AppEvent, CellFilledEvent, PathAppEvent, PathElementReconstructedEvent,
+  SimulationFinishedEvent
+} from '../model/events';
 import {MatSnackBar} from '@angular/material';
 import {ErrorType} from '../model/error-type';
 
@@ -15,10 +18,13 @@ export class AppComponent {
   simulator: Simulator = null;
   inputSimulationParams: SimulationParams = new SimulationParams();
   runningSimulationParams: SimulationParams;
+  currentStepExplanation: string;
   results: string[] = [];
   @ViewChild(SimulationDemoComponent) simulatorDemoComponent: SimulationDemoComponent;
 
-  constructor(public snackBarError: MatSnackBar) {}
+  constructor(public snackBarError: MatSnackBar) {
+    // intentionally empty
+  }
 
   /**
    * Start simulation
@@ -33,22 +39,52 @@ export class AppComponent {
       this.runningSimulationParams.toUpperCase();
       this.simulator = new Simulator(this.runningSimulationParams);
       this.simulatorDemoComponent.createCube(this.runningSimulationParams);
+      this.currentStepExplanation = 'Symulacja została rozpoczęta.\nMożna przejść do kolejnego kroku';
     }
   }
 
   /**
    * Follow one step of simulation
    */
-  step() {
+  step(): AppEvent {
     const eventStep = this.simulator.step();
     if (eventStep instanceof CellFilledEvent) {
       this.simulatorDemoComponent.fillCubeCell(eventStep);
+      this.setPathAppEventExplanation(eventStep);
     } else if (eventStep instanceof PathElementReconstructedEvent) {
       this.simulatorDemoComponent.reconstructPath(eventStep);
-    } else if (eventStep instanceof SimulationFinishedEvent) {
-      this.showResultOfFitness();
+      this.setPathAppEventExplanation(eventStep);
+      if (this.isSimulationFinished()) {
+        this.showResultOfFitness();
+      }
     }
     return eventStep;
+  }
+
+  /**
+   * Sets current step explanation from given path event.
+   *
+   * @param {PathAppEvent} event PathAppEvent to be translated to string explanation.
+   */
+  setPathAppEventExplanation(event: PathAppEvent) {
+    let result = '';
+    result += 'Do komórki ' + this.getArrayToString(event.pathElement.endIdx) + ' można dojść z komórek:\n';
+    for (const pathElement of event.allAllowedPathElements) {
+      result += this.getArrayToString(pathElement.startIdx) + ' z dopasowaniem ' +
+        this.getArrayToString(pathElement.symbols) + ' i wartością ' + pathElement.endCellVal + '\n';
+    }
+    this.currentStepExplanation = result;
+  }
+
+  /**
+   * Translate array to string.
+   */
+  getArrayToString(array: any[]): string {
+    let result = '(';
+    for (const element of array) {
+      result += element + ', ';
+    }
+    return result.substring(0, result.length - 2) + ')';
   }
 
   /**
@@ -74,21 +110,21 @@ export class AppComponent {
   /**
    * Returns true if simulation is running, false otherwise.
    */
-  isSimulationRunning() {
+  isSimulationRunning(): boolean {
     return this.simulator !== null;
   }
 
   /**
    * Returns true if simulation is running and finished.
    */
-  isSimulationFinished() {
+  isSimulationFinished(): boolean {
     return this.isSimulationRunning() && this.simulator.getStatus() === SimulatorState.Finished;
   }
 
   /**
    * Returns true if simulation is running and all cube cells have been filled, false otherwise.
    */
-  isCubeFilled() {
+  isCubeFilled(): boolean {
     return this.isSimulationRunning() && this.simulator.getStatus() !== SimulatorState.CalculatingCells;
   }
 

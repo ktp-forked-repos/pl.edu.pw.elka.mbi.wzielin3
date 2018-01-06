@@ -16,6 +16,11 @@
             </div>
           </mat-card-content>
         </mat-card>
+        <!-- Objaśnienie obecnego kroku !-->
+        <mat-card class="down-level-card" *ngIf="isSimulationRunning()">
+          <mat-card-title>Objaśnienie obecnego kroku</mat-card-title>
+          <mat-card-content><span class="score">{{currentStepExplanation}}</span></mat-card-content>
+        </mat-card>
         <!-- Wyniki symulacji !-->
         <mat-card class="down-level-card" *ngIf="isSimulationFinished()">
           <mat-card-title>Wynik - dopasowanie sekwencji</mat-card-title>
@@ -53,7 +58,7 @@
           uliniowienie trzech sekwencji metodą programowania dynamicznego. Użytkownik może wprowadzić własne dane
           i śledzić (krok po kroku) sposób wykonywania obliczeń.
         </p>
-        <a mat-raised-button color="primary" href="https://github.com/lukasz936/eiti_mbi_sequence_alignment">Dokumentacja</a>
+        <a mat-raised-button color="primary" href="https://github.com/lukasz936/eiti_mbi_sequence_alignment">GitHub</a>
       </mat-card-content>
     </mat-card>
   </mat-tab>

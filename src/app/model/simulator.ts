@@ -93,9 +93,9 @@ export class Simulator {
   public step(): AppEvent {
     switch (this.state) {
       case SimulatorState.CalculatingCells:
-        return new CellFilledEvent(this.calculateCurrCell());
+        return this.calculateCurrCell();
       case SimulatorState.ReconstructingPath:
-        return new PathElementReconstructedEvent(this.reconstructCurrPathElement());
+        return this.reconstructCurrPathElement();
       case SimulatorState.Finished:
         return new SimulationFinishedEvent(this.reconstructedPath);
       default:
@@ -106,33 +106,51 @@ export class Simulator {
   /**
    * Calculate next cell and return path element corresponding to performed transition.
    *
-   * @return best path element to current cell
+   * @return event of filling the cell
    */
-  private calculateCurrCell(): PathElement {
-    const pathElement = this.getBestPathElement();
+  private calculateCurrCell(): CellFilledEvent {
+    const allPathElements = this.getAllAllowedPathElements();
+    const pathElement = this.getBestPathElement(allPathElements);
     this.cube[this.idx[0]][this.idx[1]][this.idx[2]] = pathElement.endCellVal;
     if (this.isCurrCellLast()) {
       this.state = SimulatorState.ReconstructingPath;
     } else {
       this.incrementIdx();
     }
-    return pathElement;
+    return new CellFilledEvent(pathElement, allPathElements);
   }
 
   /**
    * Calculate best path element to previous cell from current cell
    * and move to previous cell.
    *
-   * @return best path element to previous cell.
+   * @return event of reconstructed path element.
    */
-  private reconstructCurrPathElement(): PathElement {
-    const pathElement = this.getBestPathElement();
+  private reconstructCurrPathElement(): PathElementReconstructedEvent {
+    const allPathElements = this.getAllAllowedPathElements();
+    const pathElement = this.getBestPathElement(allPathElements);
     this.idx = pathElement.startIdx;
     if (this.isCurrCellFirst()) {
       this.state = SimulatorState.Finished;
     }
     this.reconstructedPath.unshift(pathElement);
-    return pathElement;
+    return new PathElementReconstructedEvent(pathElement, allPathElements);
+  }
+
+  /**
+   * Returnes all path elements allowed to reach current cell.
+   *
+   * @return {PathElement[]} All path elements to reach current cell.
+   */
+  private getAllAllowedPathElements(): PathElement[] {
+    const allPathElements: PathElement[] = [];
+    for (let i = 0; i < this.isGapPermutations.length; ++i) {
+      const pathElement = this.getPathElement(this.isGapPermutations[i]);
+      if (pathElement !== null) {
+        allPathElements.push(pathElement);
+      }
+    }
+    return allPathElements;
   }
 
   /**
@@ -140,12 +158,10 @@ export class Simulator {
    *
    * @return {PathElement} best path element to reach current cell.
    */
-  private getBestPathElement(): PathElement {
+  private getBestPathElement(allPathElements: PathElement[]): PathElement {
     let bestPathElement: PathElement = null;
-    for (let i = 0; i < this.isGapPermutations.length; ++i) {
-      const pathElement = this.getPathElement(this.isGapPermutations[i]);
-      if (pathElement !== null &&
-        (bestPathElement === null || pathElement.endCellVal > bestPathElement.endCellVal)) {
+    for (const pathElement of allPathElements) {
+      if (bestPathElement === null || pathElement.endCellVal > bestPathElement.endCellVal) {
         bestPathElement = pathElement;
       }
     }
