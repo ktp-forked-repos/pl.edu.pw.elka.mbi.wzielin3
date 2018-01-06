@@ -1,4 +1,4 @@
-<mat-card class="top-level-card">
+<mat-card class="down-level-card">
   <mat-card-title>Parametry symulacji</mat-card-title>
   <mat-card>
     <mat-card-title>Sekwencje</mat-card-title>
@@ -21,23 +21,10 @@
         <tr *ngFor="let i of ['A', 'G', 'C', 'T', '-']">
           <th>{{i}}</th>
           <td *ngFor="let j of ['A', 'G', 'C', 'T', '-']">
-            <input type="number" matInput [(ngModel)]="simulationParams.fitnessMatrix[i][j]" class="center"
-                   title="Komórka macierzy"/>
+            <input type="number" matInput [(ngModel)]="simulationParams.fitnessMatrix[i][j]" class="center" title="Komórka macierzy"/>
           </td>
         </tr>
       </table>
     </mat-card-content>
   </mat-card>
 </mat-card>
-<mat-card>
-  <div class="button-row">
-    <button mat-raised-button color="warn" (click)="startSimulation()" style="float:left; margin-bottom: 1em;">Rozpocznij nową symulację</button>
-  </div>
-  <div class="button-row">
-    <button mat-raised-button color="primary" (click)="step()" [disabled]="!isSimulationRunning() || isSimulationFinished()">Krok symulacji</button>
-    <button mat-raised-button color="primary" (click)="skipAllSteps()"  [disabled]="!isSimulationRunning() || isSimulationFinished()">Pomiń wszystkie kroki</button>
-    <button mat-raised-button color="primary" (click)="skipCalculatingCells()"  [disabled]="!isSimulationRunning() || isCubeFilled()">Pomiń wypełnianie kostki</button>
-  </div>
-</mat-card>
-
-

@@ -2,13 +2,21 @@
   <mat-tab label="Symulator">
     <div fxLayout="row">
       <div fxFlex="50%" class="margin-auto">
-        <app-simulation-editor
-          (onStartedSimulation)="startSimulation($event)"
-          (onStepCliked)="step($event)"
-          (onSkipAllStepsClicked)="skipAllSteps($event)"
-          (onSkipCalculatingCellsClicked)="skipCalculatingCells($event)"
-          [(simulator)]="simulator">
-        </app-simulation-editor>
+        <app-simulation-editor [(simulationParams)]="inputSimulationParams"></app-simulation-editor>
+        <!-- Przyciski zarządzania symulacją !-->
+        <mat-card class="down-level-card" >
+          <mat-card-content>
+            <div class="button-row">
+              <button mat-raised-button color="warn" (click)="startSimulation()" style="float:left; margin-bottom: 1em;">Rozpocznij nową symulację</button>
+            </div>
+            <div class="button-row">
+              <button mat-raised-button color="primary" (click)="step()" [disabled]="!isSimulationRunning() || isSimulationFinished()">Krok symulacji</button>
+              <button mat-raised-button color="primary" (click)="skipAllSteps()"  [disabled]="!isSimulationRunning() || isSimulationFinished()">Pomiń wszystkie kroki</button>
+              <button mat-raised-button color="primary" (click)="skipCalculatingCells()"  [disabled]="!isSimulationRunning() || isCubeFilled()">Pomiń wypełnianie kostki</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <!-- Wyniki symulacji !-->
         <mat-card class="down-level-card" *ngIf="isSimulationFinished()">
           <mat-card-title>Wynik - dopasowanie sekwencji</mat-card-title>
           <mat-card-content>
@@ -24,6 +32,7 @@
           </mat-card-content>
         </mat-card>
       </div>
+      <!-- Demo !-->
       <div fxFlex="50%" class="margin-auto">
         <app-algorithm-demo [(simulator)]="simulator"></app-algorithm-demo>
       </div>
