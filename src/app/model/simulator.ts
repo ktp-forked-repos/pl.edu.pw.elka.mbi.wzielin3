@@ -239,14 +239,29 @@ export class Simulator {
     return idx >= 0 && idx <= this.params.sequences[seqNo].length;
   }
 
-  public getCubeValue(idxSeq1, idxSeq2, idxSeq3) {
-    return this.cube[idxSeq1][idxSeq2][idxSeq3];
+  /**
+   *
+   * @param idxX - index of X dimension of cube
+   * @param idxY - index of Y dimension of cube
+   * @param idxZ - index of Z dimension of cube
+   * @returns value of indicated cell
+   */
+  public getCubeValue(idxX, idxY, idxZ) {
+    return this.cube[idxX][idxY][idxZ];
   }
 
+  /**
+   *
+   * @returns reconstructed Path
+   */
   public getReconstructedPath() {
     return this.reconstructedPath;
   }
 
+  /**
+   *
+   * @returns status of simulation
+   */
   public getStatus() {
     return this.state;
   }

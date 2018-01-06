@@ -1,5 +1,3 @@
-import { async } from '@angular/core/testing';
-
 import {SimulationParams} from './simulation-params';
 
 describe('Simulation params', () => {

@@ -1,3 +1,6 @@
+/**
+ * Class responsible for implementation of basic graphic activity
+ */
 export class Graphic {
 
   private cellDiagonalSize;
@@ -8,17 +11,31 @@ export class Graphic {
     this.calculateParameters();
   }
 
+  /**
+   * Clear canvas in which cube or wall is being demonstrated
+   */
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
+  /**
+   * Calculate parameters involved in basic graphic activity
+   */
   calculateParameters() {
     this.seqFontSize = this.cellSize / 1.5;
     this.valFontSize = this.cellSize / 1.9;
     this.cellDiagonalSize = this.diagonalFactor * this.cellSize;
   }
 
-  drawLine(x, y, length, angle, isDash) {
+  /**
+   * Add line with indicated parameters
+   * @param x - start position X
+   * @param y - start position Y
+   * @param length of line
+   * @param angle of line
+   * @param isDash - parameter which is responsible for making dotted line
+   */
+  addLine(x, y, length, angle, isDash) {
     const angleRadian = Math.PI * angle / 180;
     let r = this.cellSize * length;
     if (angle !== 90) {
@@ -35,6 +52,12 @@ export class Graphic {
     this.ctx.stroke();
   }
 
+  /**
+   * Add text with sequence font size
+   * @param x
+   * @param y
+   * @param text
+   */
   addTextSequence(x, y, text) {
     this.ctx.textAlign = 'center';
     this.ctx.font = 'bold ' + this.seqFontSize + 'px Arial';
@@ -49,6 +72,12 @@ export class Graphic {
     this.ctx.strokeStyle = 'black';
   }
 
+  /**
+   * Add text with value of cell font size
+   * @param x
+   * @param y
+   * @param text
+   */
   addTextValue(x, y, text) {
     this.ctx.textAlign = 'center';
     this.ctx.font = this.valFontSize + 'px Arial';
@@ -56,6 +85,13 @@ export class Graphic {
     this.ctx.fillText(text, x, y);
   }
 
+  /**
+   * Backlight indicated wall of cube
+   * @param x - start point x
+   * @param y - start point y
+   * @param lengthX - length of edge X
+   * @param lengthY - length of edge Y
+   */
   backlightWall(x, y, lengthX, lengthY) {
     const currX: number[] = [];
     const currY: number[] = [];
@@ -86,6 +122,11 @@ export class Graphic {
     this.ctx.fill();
   }
 
+  /**
+   * Backlight indicated cell on the wall
+   * @param x - start point X
+   * @param y - start point Y
+   */
   backlightCell(x, y) {
     const currX: number[] = [];
     const currY: number[] = [];

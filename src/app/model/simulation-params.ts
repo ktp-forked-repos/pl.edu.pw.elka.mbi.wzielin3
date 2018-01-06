@@ -55,12 +55,18 @@ export class SimulationParams {
       this.fitnessMatrix[symbols[1]][symbols[2]];
   }
 
+  /**
+   * Change low cases to upper in all sequences
+   */
   toUpperCase() {
     for (let seqNo = 0; seqNo < 3; ++seqNo) {
       this.sequences[seqNo] = this.sequences[seqNo].toUpperCase();
     }
   }
 
+  /**
+   * Is any empty sequence
+   */
   isEmptySequence() {
     for (let seqNo = 0; seqNo < 3; ++seqNo) {
       if (this.sequences[seqNo].length === 0) {
@@ -70,6 +76,9 @@ export class SimulationParams {
     return false;
   }
 
+  /**
+   * Is any empty value in fitness matrix
+   */
   isEmptyValueInMatrix() {
     const symbols = ['A', 'G', 'C', 'T', '-'];
     for (let i = 0; i < symbols.length; ++i) {

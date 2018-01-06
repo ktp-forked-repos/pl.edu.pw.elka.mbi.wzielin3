@@ -18,11 +18,12 @@ export class AppComponent {
   results: string[] = [];
   @ViewChild(SimulationDemoComponent) simulatorDemoComponent: SimulationDemoComponent;
 
-  constructor(public snackBarError: MatSnackBar) {
+  constructor(public snackBarError: MatSnackBar) {}
 
-  }
-
-  startSimulation(event) {
+  /**
+   * Start simulation
+   */
+  startSimulation() {
     if (this.inputSimulationParams.isEmptySequence()) {
       this.snackBarError.open(ErrorType.Sequence, '', {duration: 5000});
     } else if (this.inputSimulationParams.isEmptyValueInMatrix()) {
@@ -35,6 +36,9 @@ export class AppComponent {
     }
   }
 
+  /**
+   * Follow one step of simulation
+   */
   step() {
     const eventStep = this.simulator.step();
     if (eventStep instanceof CellFilledEvent) {
@@ -42,7 +46,7 @@ export class AppComponent {
     } else if (eventStep instanceof PathElementReconstructedEvent) {
       this.simulatorDemoComponent.reconstructPath(eventStep);
     } else if (eventStep instanceof SimulationFinishedEvent) {
-      this.showResult();
+      this.showResultOfFitness();
     }
     return eventStep;
   }
@@ -54,7 +58,7 @@ export class AppComponent {
     while (!(this.simulator.step() instanceof SimulationFinishedEvent)) { }
     this.simulatorDemoComponent.putAllCellsValues();
     this.simulatorDemoComponent.showCubeWallDetails(0, true);
-    this.showResult();
+    this.showResultOfFitness();
   }
 
   /**
@@ -65,7 +69,7 @@ export class AppComponent {
       this.simulator.step();
     }
     this.simulatorDemoComponent.putAllCellsValues();
-    this.showResult();
+    this.showResultOfFitness();
   }
   /**
    * Returns true if simulation is running, false otherwise.
@@ -88,7 +92,10 @@ export class AppComponent {
     return this.isSimulationRunning() && this.simulator.getStatus() !== SimulatorState.CalculatingCells;
   }
 
-  showResult() {
+  /**
+   * Shows result of fitness algorithm as three sequences with the possibility of break
+   */
+  showResultOfFitness() {
     this.results = [];
     const reconstructedPath = this.simulator.getReconstructedPath();
     for (let i = 0; i < reconstructedPath.length; ++i) {

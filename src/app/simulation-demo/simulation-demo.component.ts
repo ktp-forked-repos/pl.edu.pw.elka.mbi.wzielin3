@@ -23,16 +23,20 @@ export class SimulationDemoComponent {
   constructor() {
   }
 
+  /**
+   * Start demonstration by creating cube and clear cube wall
+   * @param params - simulation parameters
+   */
   createCube(params) {
     this.sequences = params.sequences;
     this.cubeCtx = this.canvasCube.nativeElement.getContext('2d');
     this.cubeWallCtx = this.canvasCubeWall.nativeElement.getContext('2d');
     this.cube = new Cube(params.sequences, this.cubeCtx);
     this.cube.addCellValue(0, 0, 0, 0);
-    this.currentWallNo = 0;
     if (this.cubeWall !== null) {
       this.cubeWall.clearCanvas();
     }
+    this.currentWallNo = 0;
   }
 
   fillCubeCell(eventStep) {
