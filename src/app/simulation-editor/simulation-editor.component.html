@@ -21,7 +21,7 @@
         <tr *ngFor="let i of ['A', 'G', 'C', 'T', '-']">
           <th>{{i}}</th>
           <td *ngFor="let j of ['A', 'G', 'C', 'T', '-']">
-            <input type="number" matInput [(ngModel)]="simulationParams.fitnesMatrix[i][j]" class="center"
+            <input type="number" matInput [(ngModel)]="simulationParams.fitnessMatrix[i][j]" class="center"
                    title="Komórka macierzy"/>
           </td>
         </tr>
@@ -30,9 +30,9 @@
   </mat-card>
   <div class="button-row">
     <button mat-raised-button color="primary" (click)="startSimulation()">Nowa symulacja</button>
-    <button mat-raised-button color="primary" (click)="step()" *ngIf="simulationStarted" [disabled]="isSimulationFinished()">Krok symulacji
+    <button mat-raised-button color="primary" (click)="step()" [disabled]="isSimulationFinished()">Krok symulacji
     </button>
-    <button mat-raised-button color="primary" (click)="skipAllSteps()" *ngIf="simulationStarted" [disabled]="isSimulationFinished()">Pomiń kroki symulacji
+    <button mat-raised-button color="primary" (click)="skipAllSteps()"  [disabled]="isSimulationFinished()">Pomiń kroki symulacji
     </button>
   </div>
 </mat-card>

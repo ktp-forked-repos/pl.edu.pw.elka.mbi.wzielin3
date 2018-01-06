@@ -17,6 +17,7 @@ export class AppComponent {
 
   startSimulation(event) {
     this.simulationParams = event;
+    this.simulationParams.toUpperCase();
     this.simulator = new Simulator(this.simulationParams);
     this.simulatorDemoComponent.createCube(this.simulationParams);
   }

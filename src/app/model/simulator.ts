@@ -44,6 +44,7 @@ export class Simulator {
     this.calculateGapPermutationsRecursive([false, false, false], 0, this.isGapPermutations);
   }
 
+
   /**
    * Returnes empty 3-dimensional cube for this simulation.
    */
@@ -169,7 +170,7 @@ export class Simulator {
     if (!this.isValidIdx(idx)) {
       return null;
     }
-    const val = this.cube[idx[0]][idx[1]][idx[2]] + this.params.getFitnes(symbols);
+    const val = this.cube[idx[0]][idx[1]][idx[2]] + this.params.getFitness(symbols);
     return new PathElement(idx, this.idx.slice(0), symbols, val);
   }
 

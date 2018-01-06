@@ -1,6 +1,9 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, NgModule, Output} from '@angular/core';
 import {SimulationParams} from '../model/simulation-params';
-import {Simulator, SimulatorState} from "../model/simulator";
+import {Simulator, SimulatorState} from '../model/simulator';
+import {MatSnackBar} from '@angular/material';
+import {ErrorType} from './input-error/error-type';
+
 
 @Component({
   selector: 'app-simulation-editor',
@@ -8,20 +11,23 @@ import {Simulator, SimulatorState} from "../model/simulator";
   styleUrls: ['./simulation-editor.component.css']
 })
 export class SimulationEditorComponent {
-
   simulationParams: SimulationParams = new SimulationParams();
-  simulationStarted = false;
   @Input() simulator: Simulator;
   @Output() onStartedSimulation: EventEmitter<SimulationParams> = new EventEmitter();
   @Output() onStepCliked: EventEmitter<string> = new EventEmitter();
   @Output() onSkipAllStepsClicked: EventEmitter<string> = new EventEmitter();
 
-  constructor() {
+  constructor(public snackBarError: MatSnackBar) {
   }
 
   startSimulation() {
-    this.simulationStarted = true;
-    this.onStartedSimulation.emit(this.simulationParams.clone());
+    if (this.simulationParams.isEmptySequence()) {
+      this.snackBarError.open(ErrorType.Sequence, '', {duration: 5000});
+    } else if (this.simulationParams.isEmptyValueInMatrix()) {
+      this.snackBarError.open(ErrorType.FitnessMatrix, '', {duration: 5000});
+    } else {
+      this.onStartedSimulation.emit(this.simulationParams.clone());
+    }
   }
 
   /**

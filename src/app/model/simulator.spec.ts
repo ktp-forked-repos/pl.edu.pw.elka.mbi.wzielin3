@@ -9,11 +9,11 @@ describe('Simulator', () => {
 
   beforeEach(() => {
     simulationParams = new SimulationParams();
-    simulationParams.fitnesMatrix['A'] = makeFitnessMatrixRow(10, -10, -10, -10, -5);
-    simulationParams.fitnesMatrix['G'] = makeFitnessMatrixRow(-10, 10, -10, -10, -5);
-    simulationParams.fitnesMatrix['C'] = makeFitnessMatrixRow(-10, -10, 10, -10, -5);
-    simulationParams.fitnesMatrix['T'] = makeFitnessMatrixRow(-10, -10, -10, 10, -5);
-    simulationParams.fitnesMatrix['-'] = makeFitnessMatrixRow(-5, -5, -5, -5, 0);
+    simulationParams.fitnessMatrix['A'] = makeFitnessMatrixRow(10, -10, -10, -10, -5);
+    simulationParams.fitnessMatrix['G'] = makeFitnessMatrixRow(-10, 10, -10, -10, -5);
+    simulationParams.fitnessMatrix['C'] = makeFitnessMatrixRow(-10, -10, 10, -10, -5);
+    simulationParams.fitnessMatrix['T'] = makeFitnessMatrixRow(-10, -10, -10, 10, -5);
+    simulationParams.fitnessMatrix['-'] = makeFitnessMatrixRow(-5, -5, -5, -5, 0);
   });
 
   it('should align equal symbols', () => {
@@ -26,8 +26,8 @@ describe('Simulator', () => {
 
   it('should align simmilar symbols', () => {
     simulationParams.sequences = ['A', 'C', 'C'];
-    simulationParams.fitnesMatrix['A']['C'] = -3;
-    simulationParams.fitnesMatrix['C']['A'] = -3;
+    simulationParams.fitnessMatrix['A']['C'] = -3;
+    simulationParams.fitnessMatrix['C']['A'] = -3;
     const event = act();
     expect(event.getSequence(0)).toBe('A');
     expect(event.getSequence(1)).toBe('C');

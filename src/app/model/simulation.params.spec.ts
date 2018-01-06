@@ -7,19 +7,19 @@ describe('Simulation params', () => {
 
   beforeEach(() => {
     simulationParams = new SimulationParams();
-    simulationParams.fitnesMatrix['A'] = makeFitnessMatrixRow(10, -10, -10, -10, -5);
-    simulationParams.fitnesMatrix['G'] = makeFitnessMatrixRow(-10, 10, -10, -10, -5);
-    simulationParams.fitnesMatrix['C'] = makeFitnessMatrixRow(-10, -10, 10, -10, -5);
-    simulationParams.fitnesMatrix['T'] = makeFitnessMatrixRow(-10, -10, -10, 10, -5);
-    simulationParams.fitnesMatrix['-'] = makeFitnessMatrixRow(-5, -5, -5, -5, 0);
+    simulationParams.fitnessMatrix['A'] = makeFitnessMatrixRow(10, -10, -10, -10, -5);
+    simulationParams.fitnessMatrix['G'] = makeFitnessMatrixRow(-10, 10, -10, -10, -5);
+    simulationParams.fitnessMatrix['C'] = makeFitnessMatrixRow(-10, -10, 10, -10, -5);
+    simulationParams.fitnessMatrix['T'] = makeFitnessMatrixRow(-10, -10, -10, 10, -5);
+    simulationParams.fitnessMatrix['-'] = makeFitnessMatrixRow(-5, -5, -5, -5, 0);
   });
 
   it('should calculate symbols fitness', () => {
-    expect(simulationParams.getFitnes(['A', 'A', 'A'])).toBe(30);
-    expect(simulationParams.getFitnes(['A', 'A', '-'])).toBe(0);
-    expect(simulationParams.getFitnes(['A', '-', '-'])).toBe(-10);
-    expect(simulationParams.getFitnes(['A', 'G', 'G'])).toBe(-10);
-    expect(simulationParams.getFitnes(['A', 'G', '-'])).toBe(-20);
+    expect(simulationParams.getFitness(['A', 'A', 'A'])).toBe(30);
+    expect(simulationParams.getFitness(['A', 'A', '-'])).toBe(0);
+    expect(simulationParams.getFitness(['A', '-', '-'])).toBe(-10);
+    expect(simulationParams.getFitness(['A', 'G', 'G'])).toBe(-10);
+    expect(simulationParams.getFitness(['A', 'G', '-'])).toBe(-20);
   });
 
   /**
