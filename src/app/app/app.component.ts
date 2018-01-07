@@ -7,7 +7,6 @@ import {
   SimulationFinishedEvent
 } from '../model/events';
 import {MatSnackBar} from '@angular/material';
-import {ErrorType} from '../model/error-type';
 
 @Component({
   selector: 'app-root',
@@ -27,19 +26,18 @@ export class AppComponent {
   }
 
   /**
-   * Start simulation
+   * Validate input params and start simulation
    */
   startSimulation() {
-    if (this.inputSimulationParams.isEmptySequence()) {
-      this.snackBarError.open(ErrorType.Sequence, '', {duration: 5000});
-    } else if (this.inputSimulationParams.isEmptyValueInMatrix()) {
-      this.snackBarError.open(ErrorType.FitnessMatrix, '', {duration: 5000});
-    } else {
+    const errors = this.inputSimulationParams.validate();
+    if (errors.length === 0) {
       this.runningSimulationParams = this.inputSimulationParams.clone();
-      this.runningSimulationParams.toUpperCase();
       this.simulator = new Simulator(this.runningSimulationParams);
       this.simulatorDemoComponent.startDemostration(this.runningSimulationParams);
       this.currentStepExplanation = 'Symulacja została rozpoczęta.\nMożna przejść do kolejnego kroku';
+    }
+    for (const error of errors) {
+      this.snackBarError.open(error, '', {duration: 5000});
     }
   }
 
@@ -66,7 +64,7 @@ export class AppComponent {
    *
    * @param {PathAppEvent} event PathAppEvent to be translated to string explanation.
    */
-  setPathAppEventExplanation(event: PathAppEvent) {
+  private setPathAppEventExplanation(event: PathAppEvent) {
     let result = '';
     result += 'Do komórki ' + this.getArrayToString(event.pathElement.endIdx) + ' można dojść z komórek:\n';
     for (const pathElement of event.allAllowedPathElements) {
@@ -79,7 +77,7 @@ export class AppComponent {
   /**
    * Translate array to string.
    */
-  getArrayToString(array: any[]): string {
+  private getArrayToString(array: any[]): string {
     let result = '(';
     for (const element of array) {
       result += element + ', ';
@@ -132,7 +130,7 @@ export class AppComponent {
   /**
    * Shows result of fitness algorithm as three sequences with the possibility of break
    */
-  showResultOfFitness() {
+  private showResultOfFitness() {
     this.results = [];
     const reconstructedPath = this.simulator.getReconstructedPath();
     for (let i = 0; i < reconstructedPath.length; ++i) {
