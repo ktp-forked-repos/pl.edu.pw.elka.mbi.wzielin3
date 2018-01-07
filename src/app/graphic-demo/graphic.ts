@@ -91,8 +91,9 @@ export class Graphic {
    * @param y - start point y
    * @param lengthX - length of edge X
    * @param lengthY - length of edge Y
+   * @param isFront - if wall is on the front side
    */
-  backlightWall(x, y, lengthX, lengthY) {
+  backlightWall(x, y, lengthX, lengthY, isFront) {
     const currX: number[] = [];
     const currY: number[] = [];
     const leftDiagAngle = Math.PI * 195 / 180;
@@ -107,7 +108,7 @@ export class Graphic {
     currY.push(currY[2] + lengthY * this.cellDiagonalSize * Math.sin(rightDiagAngle));
     currX.push(currX[3] - this.cellDiagonalSize * Math.cos(leftDiagAngle));
     currY.push(currY[3] - this.cellDiagonalSize * Math.sin(leftDiagAngle));
-    if (x === this.width / 2 && y === this.height / 2) {
+    if (isFront) {
       x = x + lengthY * this.cellDiagonalSize * Math.cos(rightDiagAngle);
       y = y + lengthX * this.cellSize;
       y = y + lengthY * this.cellDiagonalSize * Math.sin(rightDiagAngle);

@@ -11,7 +11,7 @@ export class CubeWall {
   private cellDiagonalSize;
   private startX;
   private startY;
-  private height = 250;
+  private height = 350;
   private width = 800;
 
   private lengthX;
@@ -116,7 +116,7 @@ export class CubeWall {
   /**
    * Backlight indicated cell on the wall
    */
-  backlightCellOnWall(x, y) {
+  backlightCell(x, y) {
     const angle = Math.PI * 345 / 180;
     this.cubeWallGraphic.backlightCell(this.startX + y * this.cellDiagonalSize * Math.cos(angle), this.startY + y * this.cellDiagonalSize * Math.sin(angle) + x * this.cellSize);
   }

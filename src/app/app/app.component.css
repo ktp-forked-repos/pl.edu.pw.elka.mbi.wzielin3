@@ -13,6 +13,7 @@
 
 .margin-auto {
   margin: auto;
+  margin-top: 5px;
 }
 
 .score {

@@ -38,7 +38,7 @@ export class AppComponent {
       this.runningSimulationParams = this.inputSimulationParams.clone();
       this.runningSimulationParams.toUpperCase();
       this.simulator = new Simulator(this.runningSimulationParams);
-      this.simulatorDemoComponent.createCube(this.runningSimulationParams);
+      this.simulatorDemoComponent.startDemostration(this.runningSimulationParams);
       this.currentStepExplanation = 'Symulacja została rozpoczęta.\nMożna przejść do kolejnego kroku';
     }
   }
@@ -91,9 +91,9 @@ export class AppComponent {
    * Skips all steps until simulation is finished.
    */
   skipAllSteps() {
-    while (!(this.simulator.step() instanceof SimulationFinishedEvent)) { }
-    this.simulatorDemoComponent.putAllCellsValues();
-    this.simulatorDemoComponent.showCubeWallDetails(0, true);
+    while (!(this.simulator.step() instanceof SimulationFinishedEvent)) {
+    }
+    this.simulatorDemoComponent.demoCubeByWall(0);
     this.showResultOfFitness();
   }
 
@@ -104,9 +104,10 @@ export class AppComponent {
     while (this.simulator.getStatus() === SimulatorState.CalculatingCells) {
       this.simulator.step();
     }
-    this.simulatorDemoComponent.putAllCellsValues();
+    this.simulatorDemoComponent.demoCubeByWall(this.runningSimulationParams.sequences[2].length);
     this.showResultOfFitness();
   }
+
   /**
    * Returns true if simulation is running, false otherwise.
    */
