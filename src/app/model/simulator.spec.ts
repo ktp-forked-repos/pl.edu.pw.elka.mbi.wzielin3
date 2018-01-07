@@ -1,6 +1,6 @@
 import { async } from '@angular/core/testing';
 
-import { Simulator } from './simulator';
+import {Simulator, SimulatorState} from './simulator';
 import {SimulationParams} from './simulation-params';
 import {SimulationFinishedEvent} from './events';
 
@@ -40,6 +40,33 @@ describe('Simulator', () => {
     expect(event.getSequence(0)).toBe('A-');
     expect(event.getSequence(1)).toBe('-C');
     expect(event.getSequence(2)).toBe('-C');
+  });
+
+  it('should fill cube cells first', () => {
+    simulationParams.sequences = ['A', 'A', 'A'];
+    const simulator = new Simulator(simulationParams);
+    expect(simulator.getStatus()).toBe(SimulatorState.CalculatingCells);
+  });
+
+  it('should reconstruct path after calculating cells', () => {
+    simulationParams.sequences = ['A', 'A', 'A'];
+    const simulator = new Simulator(simulationParams);
+    while (simulator.getStatus() === SimulatorState.CalculatingCells) {
+      simulator.step();
+    }
+    expect(simulator.getStatus()).toBe(SimulatorState.ReconstructingPath);
+  });
+
+  it('should stop after reconstructing path', () => {
+    simulationParams.sequences = ['A', 'A', 'A'];
+    const simulator = new Simulator(simulationParams);
+    while (simulator.getStatus() === SimulatorState.CalculatingCells) {
+      simulator.step();
+    }
+    while (simulator.getStatus() === SimulatorState.ReconstructingPath) {
+      simulator.step();
+    }
+    expect(simulator.getStatus()).toBe(SimulatorState.Finished);
   });
 
   /**
