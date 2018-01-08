@@ -12,13 +12,15 @@ import {AppComponent} from './app.component';
 import {SimulationEditorComponent} from '../simulation-editor/simulation-editor.component';
 import {SequenceInputDirective} from '../sequence-input/sequence-input.directive';
 import {SimulationDemoComponent} from '../simulation-demo/simulation-demo.component';
+import {SimulationPerformanceComponent} from "../simulation-performance/simulation-performance.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    SimulationEditorComponent,
     SequenceInputDirective,
-    SimulationDemoComponent
+    SimulationEditorComponent,
+    SimulationDemoComponent,
+    SimulationPerformanceComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule, FormsModule,

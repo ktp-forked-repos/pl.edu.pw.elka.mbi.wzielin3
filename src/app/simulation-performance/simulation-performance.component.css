@@ -1,0 +1,12 @@
+.score {
+  margin: 3px;
+  text-align: left;
+  font-family: monospace;
+  font-size: 17px;
+  white-space: pre-line;
+}
+.form-field {
+  float: left;
+  clear: both;
+  margin-top: 1em;
+}
