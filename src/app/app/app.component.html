@@ -11,8 +11,8 @@
             </div>
             <div class="button-row">
               <button mat-raised-button color="primary" (click)="step()" [disabled]="!isSimulationRunning() || isSimulationFinished()">Krok symulacji</button>
-              <button mat-raised-button color="primary" (click)="skipAllSteps()"  [disabled]="!isSimulationRunning() || isSimulationFinished()">Pomiń wszystkie kroki</button>
               <button mat-raised-button color="primary" (click)="skipCalculatingCells()"  [disabled]="!isSimulationRunning() || isCubeFilled()">Pomiń wypełnianie kostki</button>
+              <button mat-raised-button color="primary" (click)="skipAllSteps()"  [disabled]="!isSimulationRunning() || isSimulationFinished()">Pomiń wszystkie kroki</button>
             </div>
           </mat-card-content>
         </mat-card>
