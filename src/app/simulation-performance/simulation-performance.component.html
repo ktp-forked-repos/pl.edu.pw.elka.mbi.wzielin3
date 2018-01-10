@@ -1,28 +1,39 @@
-<div>
-  <div class="form-field">
-  Testy wydajnościowe są uruchamiane dla trzech sekwencji tej samej długości, gdzie
-  długość w każdym zestawie testów jest zmienna począwszy od wartości początkowej, kończąc na wartości końcowej,
-  inkrementując o zadana wartość. Dla każdej długości sekwencji wykonywana jest zadana liczba testów i zwracany
-  jest średni czas wykonania testu. Wyniki wyświetlają się pod przyciskiem uruchamiania testu. Należy rozważnie
-  dobrać wartości parametrów testu, poczynając od małych testów, ponieważ czas wykonania testów rośnie sześciennie
-  wraz ze wzrostem długości sekwencji.
-  </div>
-  <mat-form-field class="form-field">
-    <input matInput type="number" [(ngModel)]="startSeqLength" title="Początkowa długośc sekwencji"/>
-    <mat-placeholder>Początkowa długośc sekwencji</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput type="number" [(ngModel)]="endSeqLength" title="Końcowa długośc sekwencji"/>
-    <mat-placeholder>Końcowa długośc sekwencji</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput type="number" [(ngModel)]="incrementSeqLengthBy" title="Wartość inkrementacji długości sekwnecji"/>
-    <mat-placeholder>Wartość inkrementacji długości sekwnecji</mat-placeholder>
-  </mat-form-field>
-  <mat-form-field class="form-field">
-    <input matInput type="number" [(ngModel)]="testsPerEachSeqLength" title="Liczba testów dla jednej długości sekwencji"/>
-    <mat-placeholder>Liczba testów dla jednej długości sekwencji</mat-placeholder>
-  </mat-form-field>
-  <button mat-raised-button color="warn" (click)="test()" class="form-field">Uruchom test wydajnościowy</button>
-  <div *ngIf="testResults" class="score form-field">{{testResults}}</div>
-</div>
+<mat-card class="top-level-card">
+  <mat-card-title>Testy wydajnościowe</mat-card-title>
+  <mat-card-content>
+    <p>Testy wydajnościowe są uruchamiane dla trzech sekwencji tej samej długości, gdzie
+      długość w każdym zestawie testów jest zmienna począwszy od wartości początkowej, kończąc na wartości końcowej,
+      inkrementując o zadana wartość. Dla każdej długości sekwencji wykonywana jest zadana liczba testów i zwracany
+      jest średni czas wykonania testu. Wyniki wyświetlają się pod przyciskiem uruchamiania testu. Należy rozważnie
+      dobrać wartości parametrów testu, poczynając od małych testów, ponieważ czas wykonania testów rośnie sześciennie
+      wraz ze wzrostem długości sekwencji.</p>
+    <mat-card class="parameter-card">
+      <mat-card-title>Parametry</mat-card-title>
+      <mat-card-content>
+        <mat-form-field class="form-field">
+          <input matInput type="number" [(ngModel)]="startSeqLength" title="Początkowa długośc sekwencji"/>
+          <mat-placeholder>Początkowa długośc sekwencji</mat-placeholder>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <input matInput type="number" [(ngModel)]="endSeqLength" title="Końcowa długośc sekwencji"/>
+          <mat-placeholder>Końcowa długośc sekwencji</mat-placeholder>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <input matInput type="number" [(ngModel)]="incrementSeqLengthBy"
+                 title="Wartość inkrementacji długości sekwnecji"/>
+          <mat-placeholder>Wartość inkrementacji długości sekwnecji</mat-placeholder>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <input matInput type="number" [(ngModel)]="testsPerEachSeqLength"
+                 title="Liczba testów dla jednej długości sekwencji"/>
+          <mat-placeholder>Liczba testów dla jednej długości sekwencji</mat-placeholder>
+        </mat-form-field>
+        <button mat-raised-button color="warn" (click)="test()" class="form-field">Uruchom test wydajnościowy</button>
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+</mat-card>
+<mat-card class="down-level-card" *ngIf="testResults">
+  <mat-card-title>Wynik testu</mat-card-title>
+  <mat-card-content><p class="score">{{testResults}}</p></mat-card-content>
+</mat-card>
