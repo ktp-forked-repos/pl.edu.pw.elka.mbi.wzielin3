@@ -1,12 +1,25 @@
+<mat-card class="top-level-card" style="margin-bottom: 1em">
+  <mat-card-title>Testy jednostkowe</mat-card-title>
+  <mat-card-content>
+    <p>Dla aplikacji zostały wykonane testy jednostkowe przy pomocy biblioteki jasmine. Testy mogą być uruchomione
+      w katalogu głównym aplikacji z poziomu Angular CLI przy pomocy komendy <i>ng test</i>.</p>
+  </mat-card-content>
+</mat-card>
 <mat-card class="top-level-card">
   <mat-card-title>Testy wydajnościowe</mat-card-title>
   <mat-card-content>
-    <p>Testy wydajnościowe są uruchamiane dla trzech sekwencji tej samej długości, gdzie
-      długość w każdym zestawie testów jest zmienna począwszy od wartości początkowej, kończąc na wartości końcowej,
-      inkrementując o zadana wartość. Dla każdej długości sekwencji wykonywana jest zadana liczba testów i zwracany
-      jest średni czas wykonania testu. Wyniki wyświetlają się pod przyciskiem uruchamiania testu. Należy rozważnie
-      dobrać wartości parametrów testu, poczynając od małych testów, ponieważ czas wykonania testów rośnie sześciennie
-      wraz ze wzrostem długości sekwencji.</p>
+    <p>Testy wydajnościowe można przeprowadzić bezpośrednio z poziomu tego widoku aplikacji.</p>
+    <p>
+      Testy są uruchamiane dla trzech sekwencji tej samej długości, gdzie długość w każdym
+      zestawie testów jest inna począwszy od wartości początkowej, kończąc na wartości końcowej,
+      inkrementując o zadana wartość. Dla każdej długości sekwencji wykonywana jest zadana liczba
+      testów i zwracany jest średni czas wykonania testu.
+    </p>
+    <p>
+      Należy rozważnie dobrać wartości parametrów testu, poczynając od małych testów, ponieważ <b>czas wykonania
+      testów rośnie sześciennie wraz ze wzrostem długości sekwencji</b>, co może powodować zawieszenie się przeglądarki
+      dla długich sekwencji (javascript jest wykonywany jednowątkowo).
+    </p>
     <mat-card class="parameter-card">
       <mat-card-title>Parametry</mat-card-title>
       <mat-card-content>
@@ -31,9 +44,9 @@
         <button mat-raised-button color="warn" (click)="test()" class="form-field">Uruchom test wydajnościowy</button>
       </mat-card-content>
     </mat-card>
+    <mat-card class="down-level-card" *ngIf="testResults">
+      <mat-card-title>Wynik testu</mat-card-title>
+      <mat-card-content><p class="score">{{testResults}}</p></mat-card-content>
+    </mat-card>
   </mat-card-content>
-</mat-card>
-<mat-card class="down-level-card" *ngIf="testResults">
-  <mat-card-title>Wynik testu</mat-card-title>
-  <mat-card-content><p class="score">{{testResults}}</p></mat-card-content>
 </mat-card>

@@ -44,6 +44,10 @@
     </div>
   </mat-tab>
 
+  <mat-tab label="Testy">
+    <app-simulation-performance></app-simulation-performance>
+  </mat-tab>
+
   <mat-tab label="O projekcie">
     <mat-card class="top-level-card">
       <mat-card-title>O projekcie</mat-card-title>
@@ -54,17 +58,17 @@
           a w skład zespołu projektowego wchodził Łukasz Szymczyk i Wojciech Zieliński.
         </p>
         <p>
-          W ramach projektu należało napisać aplikację, która pozwala zrozumieć działanie algorytmu znajdującego
+          W ramach projektu należało stworzyć aplikację, która pozwala zrozumieć działanie algorytmu znajdującego
           uliniowienie trzech sekwencji metodą programowania dynamicznego. Użytkownik może wprowadzić własne dane
           i śledzić (krok po kroku) sposób wykonywania obliczeń.
         </p>
-        <a mat-raised-button color="primary" href="https://github.com/lukasz936/eiti_mbi_sequence_alignment">GitHub</a>
+        <p>
+          Projekt zostały wykonany przy pomocy Angular 5. Kod źródłowy, a także pełną dokumentację można znaleźć poniżej.
+        </p>
+        <a mat-raised-button color="primary" href="https://github.com/lukasz936/eiti_mbi_sequence_alignment">Repozytorium na GitHubie</a>
+        <a mat-raised-button color="primary" href="#" disabled="disabled">Pełna dokumentacja</a>
       </mat-card-content>
     </mat-card>
-  </mat-tab>
-
-  <mat-tab label="Testy">
-    <app-simulation-performance></app-simulation-performance>
   </mat-tab>
 </mat-tab-group>
 
