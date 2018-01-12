@@ -1,32 +1,40 @@
-import {Component, Input, Output} from '@angular/core';
+import {Component } from '@angular/core';
 import {SimulationParams} from '../model/simulation-params';
 import {Simulator} from '../model/simulator';
 import {SimulationFinishedEvent} from '../model/events';
-import {MatSnackBar} from "@angular/material";
-import {isNull, isUndefined} from "util";
+import {MatSnackBar} from '@angular/material';
+import {isNull, isUndefined} from 'util';
 
+/**
+ * Component responsible for displaying performance test interface.
+ */
 @Component({
   selector: 'app-simulation-performance',
   templateUrl: './simulation-performance.component.html',
   styleUrls: ['./simulation-performance.component.css']
 })
-
-/**
- * Class responsible for displaying performance test interface.
- */
 export class SimulationPerformanceComponent {
+  /** Used to display test results in view */
   testResults: string;
+  /** Starting sequence length. First test case will run for this length. */
   startSeqLength = 10;
+  /** Final sequence length. Last test case will run for this length. */
   endSeqLength = 25;
+  /** The value of which each test case's sequence length will be incremented. */
   incrementSeqLengthBy = 5;
+  /** How many tests will be run for each test case. */
   testsPerEachSeqLength = 1;
 
+  /**
+   * Default constructor.
+   * @param {MatSnackBar} snackBarError Used to show validation errors.
+   */
   constructor(public snackBarError: MatSnackBar) {
     // intentionally empty
   }
 
   /**
-   * Performance test should be run manually.
+   * Runs performance test if component parameters are valid.
    */
   public test() {
     if (!this.isPositiveInteger(this.startSeqLength) || !this.isPositiveInteger(this.endSeqLength)
@@ -47,10 +55,9 @@ export class SimulationPerformanceComponent {
       let testsSummedTime = 0;
       for (let testNo = 0; testNo < testsCount; ++testNo) {
         const t0 = performance.now();
-        const event = this.act(simulationParams);
+        this.act(simulationParams);
         const t1 = performance.now();
-        const testTime = t1 - t0;
-        testsSummedTime += testTime;
+        testsSummedTime += t1 - t0;
       }
       const testAvgTime = testsSummedTime / testsCount;
       this.testResults += seqLength + '; ' + testAvgTime + ';\n';
@@ -59,6 +66,8 @@ export class SimulationPerformanceComponent {
 
   /**
    * Performs simulation and returns result.
+   * @param simulationParams Params of the simulation.
+   * @returns Finished simulation event.
    */
   private act(simulationParams: SimulationParams): SimulationFinishedEvent {
     const simulator = new Simulator(simulationParams);
@@ -72,7 +81,7 @@ export class SimulationPerformanceComponent {
 
   /**
    * Check if given value is positive integer.
-   * @param {number} val value to check
+   * @param {number} val Value to check.
    */
   private isPositiveInteger(val: number) {
     return !isNull(val) && !isUndefined(val) && val >= 0;

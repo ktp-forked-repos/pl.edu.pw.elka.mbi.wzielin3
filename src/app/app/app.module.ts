@@ -12,8 +12,11 @@ import {AppComponent} from './app.component';
 import {SimulationEditorComponent} from '../simulation-editor/simulation-editor.component';
 import {SequenceInputDirective} from '../sequence-input/sequence-input.directive';
 import {SimulationDemoComponent} from '../simulation-demo/simulation-demo.component';
-import {SimulationPerformanceComponent} from "../simulation-performance/simulation-performance.component";
+import {SimulationPerformanceComponent} from '../simulation-performance/simulation-performance.component';
 
+/**
+ * Main module of this application. Defines dependencies.
+ */
 @NgModule({
   declarations: [
     AppComponent,

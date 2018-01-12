@@ -1,14 +1,19 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
 
+/**
+ * Directive used as a sequence input.
+ * Performs basic validation.
+ * For example allows only ACGT symbols to by inputed.
+ */
 @Directive({
   selector: '[appSequenceInput]',
 })
 export class SequenceInputDirective {
-  private allowedCharacters: string[] = ['A', 'C', 'G', 'T'];
   constructor(private el: ElementRef) { }
 
   /**
-   * When key is pressed check if given key code is accepted.
+   * When key is pressed checks if given key code is acceptable.
+   * If key code is not acceptable prevents input.
    * @param event keyboard event
    */
   @HostListener('keydown', ['$event']) onKeyDown(event) {
@@ -19,12 +24,11 @@ export class SequenceInputDirective {
   }
 
   /**
-   * After input to text box uppercase it's value.
+   * After input to text box make it's value uppercase.
    * Also caret position is forced to stay on the same position.
    * @param event keyboard event
    */
   @HostListener('input', ['$event']) onInput(event) {
-    const e = <KeyboardEvent> event;
     const caretPos = this.el.nativeElement.selectionStart;
     let oldValue = this.el.nativeElement['value'];
     let newValue = this.el.nativeElement['value'].toUpperCase();
@@ -41,9 +45,9 @@ export class SequenceInputDirective {
   }
 
   /**
-   * check if given text is allowed as a DNA sequence
-   * @param {string} text text to be checked
-   * @returns {boolean}
+   * Check if given text is allowed as a DNA sequence.
+   * @param {string} text Text to be checked
+   * @returns {boolean} true if value is acceptable, false otherwise.
    */
   isAllowed(text: string): boolean {
     return text.match(new RegExp('[^ACGT]+')) == null;
