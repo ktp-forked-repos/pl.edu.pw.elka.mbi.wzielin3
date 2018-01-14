@@ -29,14 +29,14 @@ export class CubeWall {
   /**
    * Clear canvas in which cube wall is being demonstrated
    */
-  clearCanvas() {
+  public clearCanvas() {
     this.cubeWallGraphic.clearCanvas();
   }
 
   /**
    * Calculate parameters involved in the cube wall demonstration
    */
-  calculateParameters() {
+  private calculateParameters() {
     const factorOffsetY = (this.sequences[1].length + 1) * Math.sin(Math.PI * 15 / 180);
     this.cellSize = this.height / (this.diagonalFactor * factorOffsetY + (this.sequences[0].length + 1));
     this.cellDiagonalSize = this.diagonalFactor * this.cellSize;
@@ -49,7 +49,7 @@ export class CubeWall {
   /**
    * Add interrupted edges of cube
    */
-  addInterruptedEdges() {
+  private addInterruptedEdges() {
     this.cubeWallGraphic.addLine(this.startX, this.startY, this.lengthX, 90, true);
     this.cubeWallGraphic.addLine(this.startX, this.startY, this.lengthY, 345, true);
   }
@@ -57,7 +57,7 @@ export class CubeWall {
   /**
    * Add all edges of cube
    */
-  addEdges() {
+  public addEdges() {
     for (let i = 0; i < this.lengthX; ++i) {
       const y = this.startY + this.cellSize * (i + 1);
       this.cubeWallGraphic.addLine(this.startX, y, this.lengthY, 345, false);
@@ -74,17 +74,17 @@ export class CubeWall {
   /**
    * Add symbols of sequences
    */
-  addSequenceElements() {
+  public addSequenceElements() {
     this.addElementsBySequence(90, 0);
     this.addElementsBySequence(345, 1);
   }
 
   /**
    * Add value to indicated cell on the wall
-   * @param angle of cube edge
-   * @param seqNo - sequence Number
+   * @param {number} angle Angle of cube edge
+   * @param {number} seqNo Sequence number
    */
-  addElementsBySequence(angle, seqNo) {
+  private addElementsBySequence(angle: number, seqNo: number) {
     const angleRadian = Math.PI * angle / 180;
     for (let i = 0; i < this.sequences[seqNo].length; ++i) {
       let r;
@@ -101,8 +101,11 @@ export class CubeWall {
 
   /**
    * Add value to indicated cell on the wall
+   * @param {number} x index of cell in X dimension
+   * @param {number} y index of cell in Y dimension
+   * @param {number} value Value of cell to add
    */
-  addCellValue(x, y, value) {
+  public addCellValue(x: number, y: number, value: number) {
     const angle = Math.PI * 345 / 180;
     const point2_R = this.cellDiagonalSize * (y + 1);
     const point1_R = this.cellDiagonalSize * y;
@@ -115,8 +118,10 @@ export class CubeWall {
 
   /**
    * Backlight indicated cell on the wall
+   * @param {number} x index of cell in X dimension
+   * @param {number} y index of cell in Y dimension
    */
-  backlightCell(x, y) {
+  public backlightCell(x: number, y: number) {
     const angle = Math.PI * 345 / 180;
     this.cubeWallGraphic.backlightCell(this.startX + y * this.cellDiagonalSize * Math.cos(angle), this.startY + y * this.cellDiagonalSize * Math.sin(angle) + x * this.cellSize);
   }

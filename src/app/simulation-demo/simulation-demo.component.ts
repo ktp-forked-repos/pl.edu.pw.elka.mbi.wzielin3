@@ -4,6 +4,8 @@ import {Input} from '@angular/core';
 import {Simulator, SimulatorState} from '../model/simulator';
 import {CubeWall} from '../graphic-demo/cube-wall-demo';
 import {CellFilledEvent, PathElementReconstructedEvent} from '../model/events';
+import {SimulationParams} from "../model/simulation-params";
+import {isNull, isUndefined} from "util";
 
 @Component({
   selector: 'app-algorithm-demo',
@@ -26,9 +28,9 @@ export class SimulationDemoComponent {
 
   /**
    * Start demonstration by creating cube and clear cube wall
-   * @param params - simulation parameters
+   * @param {SimulationParams} params Params of the simulation.
    */
-  startDemostration(params) {
+  public startDemostration(params: SimulationParams) {
     this.sequences = params.sequences;
     this.cubeCtx = this.canvasCube.nativeElement.getContext('2d');
     this.cubeWallCtx = this.canvasCubeWall.nativeElement.getContext('2d');
@@ -42,8 +44,9 @@ export class SimulationDemoComponent {
 
   /**
    * Fill cube cell after calculating value
+   * @param {CellFilledEvent} eventStep CellFilledEvent - fill cell with value event.
    */
-  fillCubeCell(eventStep: CellFilledEvent) {
+  public fillCubeCell(eventStep: CellFilledEvent) {
     const endIdxs = eventStep.pathElement.endIdx;
     /** Backlight last cell */
     if (endIdxs[0] === this.sequences[0].length && endIdxs[1] === this.sequences[1].length && endIdxs[2] === this.sequences[2].length) {
@@ -61,8 +64,9 @@ export class SimulationDemoComponent {
 
   /**
    * Create cube and fill all the cells until indicated wall
+   * @param {number} z Value of wall number
    */
-  createCubeAndFillWalls(z) {
+  public createCubeAndFillWalls(z: number) {
     this.cube = new Cube(this.sequences, this.cubeCtx);
     for (let i = 0; i < z; ++i) {
       for (let j = 0; j <= this.sequences[1].length; ++j) {
@@ -75,8 +79,9 @@ export class SimulationDemoComponent {
 
   /**
    * Create cube wall and fill it
+   * @param {number} z Value of wall number
    */
-  createCubeWallAndFill(z) {
+  public createCubeWallAndFill(z: number) {
     this.cubeWall = new CubeWall(this.sequences, this.cubeWallCtx);
     for (let j = 0; j <= this.sequences[1].length; ++j) {
       for (let k = 0; k <= this.sequences[0].length; ++k) {
@@ -87,8 +92,9 @@ export class SimulationDemoComponent {
 
   /**
    * Demonstration cube and cube wall
+   * @param {number} wallNo Value of wall number
    */
-  demoCubeByWall(wallNo) {
+  public demoCubeByWall(wallNo: number) {
     this.createCubeAndFillWalls(this.sequences[2].length + 1);
     this.cube.backlightWall(wallNo);
     this.createCubeWallAndFill(wallNo);
@@ -107,8 +113,9 @@ export class SimulationDemoComponent {
 
   /**
    * Demonstration reconstruction path
+   * @param {PathElementReconstructedEvent} eventStep PathElementReconstructedEvent - element of the path has been reconstructed.
    */
-  reconstructPath(eventStep: PathElementReconstructedEvent) {
+  public reconstructPath(eventStep: PathElementReconstructedEvent) {
     this.demoCubeByWall(eventStep.pathElement.startIdx[2]);
     if (!this.isSimulationFinished()) {
       this.cubeWall.backlightCell(eventStep.pathElement.startIdx[0], eventStep.pathElement.startIdx[1]);
@@ -118,7 +125,7 @@ export class SimulationDemoComponent {
   /**
    * Demonstration next wall of cube
    */
-  nextWall() {
+  public nextWall() {
     if (this.currentWallNo < this.sequences[2].length) {
       this.demoCubeByWall(++this.currentWallNo);
     }
@@ -127,7 +134,7 @@ export class SimulationDemoComponent {
   /**
    * Demonstration previous wall of cube
    */
-  previousWall() {
+  public previousWall() {
     if (this.currentWallNo > 0) {
       this.demoCubeByWall(--this.currentWallNo);
     }
@@ -135,8 +142,9 @@ export class SimulationDemoComponent {
 
   /**
    * Check if simulation is finished
+   * @returns true if simulation is finished.
    */
-  isSimulationFinished() {
+  isSimulationFinished(): boolean {
     if (this.simulator !== null) {
       return this.simulator.getStatus() === SimulatorState.Finished;
     }

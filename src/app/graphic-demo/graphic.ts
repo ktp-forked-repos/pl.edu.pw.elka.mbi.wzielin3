@@ -14,14 +14,14 @@ export class Graphic {
   /**
    * Clear canvas in which cube or wall is being demonstrated
    */
-  clearCanvas() {
+  public clearCanvas() {
     this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
   /**
    * Calculate parameters involved in basic graphic activity
    */
-  calculateParameters() {
+  public calculateParameters() {
     this.seqFontSize = this.cellSize / 1.5;
     this.valFontSize = this.cellSize / 1.9;
     this.cellDiagonalSize = this.diagonalFactor * this.cellSize;
@@ -29,13 +29,13 @@ export class Graphic {
 
   /**
    * Add line with indicated parameters
-   * @param x - start position X
-   * @param y - start position Y
-   * @param length of line
-   * @param angle of line
-   * @param isDash - parameter which is responsible for making dotted line
+   * @param {number} x start position in X dimension
+   * @param {number} y start position in Y dimension
+   * @param {number} length Length of line
+   * @param {number} angle Angle of line
+   * @param {boolean} isDash Parameter which is responsible for making dotted line
    */
-  addLine(x, y, length, angle, isDash) {
+  public addLine(x: number, y: number, length: number, angle: number, isDash: boolean) {
     const angleRadian = Math.PI * angle / 180;
     let r = this.cellSize * length;
     if (angle !== 90) {
@@ -54,11 +54,11 @@ export class Graphic {
 
   /**
    * Add text with sequence font size
-   * @param x
-   * @param y
-   * @param text
+   * @param {number} x position in X dimension
+   * @param {number} y position in Y dimension
+   * @param {string} text Sequence element
    */
-  addTextSequence(x, y, text) {
+  public addTextSequence(x: number, y: number, text: string) {
     this.ctx.textAlign = 'center';
     this.ctx.font = 'bold ' + this.seqFontSize + 'px Arial';
     this.ctx.beginPath();
@@ -74,11 +74,11 @@ export class Graphic {
 
   /**
    * Add text with value of cell font size
-   * @param x
-   * @param y
-   * @param text
+   * @param {number} x position in X dimension
+   * @param {number} y position in Y dimension
+   * @param {string} text Text Value
    */
-  addTextValue(x, y, text) {
+  public addTextValue(x: number, y: number, text: string) {
     this.ctx.textAlign = 'center';
     this.ctx.font = this.valFontSize + 'px Arial';
     this.ctx.fillStyle = 'black';
@@ -87,13 +87,13 @@ export class Graphic {
 
   /**
    * Backlight indicated wall of cube
-   * @param x - start point x
-   * @param y - start point y
-   * @param lengthX - length of edge X
-   * @param lengthY - length of edge Y
-   * @param isFront - if wall is on the front side
+   * @param {number} x start position in X dimension
+   * @param {number} y start position in Y dimension
+   * @param {number} lengthX length of edge in X dimension
+   * @param {number} lengthY length of edge in Y dimension
+   * @param {boolean} isFront Parameter specifying whether wall is on the front side
    */
-  backlightWall(x, y, lengthX, lengthY, isFront) {
+  public backlightWall(x: number, y: number, lengthX: number, lengthY: number, isFront: boolean) {
     const currX: number[] = [];
     const currY: number[] = [];
     const leftDiagAngle = Math.PI * 195 / 180;
@@ -125,10 +125,10 @@ export class Graphic {
 
   /**
    * Backlight indicated cell on the wall
-   * @param x - start point X
-   * @param y - start point Y
+   * @param {number} x start position in X dimension
+   * @param {number} y start position in Y dimension
    */
-  backlightCell(x, y) {
+  public backlightCell(x, y) {
     const currX: number[] = [];
     const currY: number[] = [];
     const rightDiagAngle = Math.PI * 345 / 180;
